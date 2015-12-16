@@ -1,0 +1,20 @@
+version '1.0'
+group 'com.company.project'
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+}
+
+sourceSets {
+}
+
+dependencies {
+  compile 'com.googlecode.json-simple:json-simple:1.1.1'
+  compile 'org.mongodb:mongo-java-driver:3.1.1'
+}
