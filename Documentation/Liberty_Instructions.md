@@ -41,7 +41,7 @@ cd $WLP_SERVERDIR
 bin/server create acmeair
 ```
 
-* Copy the web application you previously built
+* Copy the web application you previously built  
 Windows:
 ```text
 copy %ACMEAIR_SRCDIR%\acmeair-webapp\build\libs\acmeair-webapp-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair\apps\.
@@ -77,7 +77,6 @@ Change $WLP_SERVERDIR/acmeair/server.xml to:
     <jndiEntry jndiName="com/acmeair/repository/type" value="mongo"/>
 
 </server>
-</code>
 ```
 
 ## MicroService Mode (optional): Create the three additional WebSphere Liberty servers
@@ -96,7 +95,7 @@ cd $WLP_SERVERDIR
 bin/server create acmeair-as
 ```
 
-* Copy the web application you previously built
+* Copy the web application you previously built  
 Windows:
 ```text
 copy %ACMEAIR_SRCDIR%\acmeair-as\build\libs\acmeair-as-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-as\apps\.
@@ -132,7 +131,6 @@ Change $WLP_SERVERDIR/acmeair-as/server.xml to:
     <jndiEntry jndiName="com/acmeair/repository/type" value="mongo"/>
 
 </server>
-</code>
 ```
 
 ### Customer Service
@@ -149,7 +147,7 @@ cd $WLP_SERVERDIR
 bin/server create acmeair-cs
 ```
 
-* Copy the web application you previously built
+* Copy the web application you previously built  
 Windows:
 ```text
 copy %ACMEAIR_SRCDIR%\acmeair-as\build\libs\acmeair-cs-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-cs\apps\.
@@ -185,7 +183,6 @@ Change $WLP_SERVERDIR/acmeair-cs/server.xml to:
     <jndiEntry jndiName="com/acmeair/repository/type" value="mongo"/>
 
 </server>
-</code>
 ```
 
 ### Flight Booking Service
@@ -202,7 +199,7 @@ cd $WLP_SERVERDIR
 bin/server create acmeair-fbs
 ```
 
-* Copy the web application you previously built
+* Copy the web application you previously built  
 Windows:
 ```text
 copy %ACMEAIR_SRCDIR%\acmeair-fbs\build\libs\acmeair-fbs-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-fbs\apps\.
@@ -238,7 +235,6 @@ Change $WLP_SERVERDIR/acmeair-fbs/server.xml to:
     <jndiEntry jndiName="com/acmeair/repository/type" value="mongo"/>
 
 </server>
-</code>
 ```
 
 
@@ -260,8 +256,8 @@ bin/server start acmeair
 
 ## MicroService Mode - Start all the WebSphere Liberty servers with env variables
 
-* Start the WebSphere Liberty server
-Windows:
+* Start the WebSphere Liberty servers  
+Windows:  
 ```text
 cd %WLP_SERVERDIR%
 set AUTH_SERVICE=localhost:9091
