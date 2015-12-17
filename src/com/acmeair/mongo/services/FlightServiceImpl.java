@@ -45,7 +45,7 @@ import com.mongodb.client.MongoDatabase;
 public class FlightServiceImpl extends FlightService implements  MongoConstants {
 
 	//private final static Logger logger = Logger.getLogger(FlightService.class.getName()); 
-	
+	private MongoDatabase database;
 	private MongoCollection<Document> flight;
 	private MongoCollection<Document> flightSegment;
 	private MongoCollection<Document> airportCodeMapping;
@@ -57,7 +57,7 @@ public class FlightServiceImpl extends FlightService implements  MongoConstants 
 	
 	@PostConstruct
 	public void initialization() {
-		MongoDatabase database = ConnectionManager.getConnectionManager().getDB();
+		database = ConnectionManager.getConnectionManager().getDB();
 		flight = database.getCollection("flight");
 		flightSegment = database.getCollection("flightSegment");
 		airportCodeMapping = database.getCollection("airportCodeMapping");
@@ -157,6 +157,8 @@ public class FlightServiceImpl extends FlightService implements  MongoConstants 
 	@Override
 	public void createAirportCodeMapping(String airportCode, String airportName) {
 		
+		
+		
 		Document airportDoc = new Document("_id", airportCode)
         .append("airportName", airportName);
 		
@@ -205,5 +207,9 @@ public class FlightServiceImpl extends FlightService implements  MongoConstants 
         .append("miles", miles);
 		
 		flightSegment.insertOne(flightSegmentDoc);
+	}
+	
+	public void dropDB(){
+		  database.drop();
 	}
 }

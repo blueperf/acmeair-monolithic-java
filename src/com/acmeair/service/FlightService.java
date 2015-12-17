@@ -190,5 +190,7 @@ public abstract class FlightService {
 	public abstract Long countFlights();
 	
 	public abstract Long countAirports();
+
+	public abstract void dropDB();
 	
 }

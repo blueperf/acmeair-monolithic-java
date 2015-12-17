@@ -154,40 +154,10 @@ public class ServiceLocator {
 				for (Object k: json.keySet())
 				{
 					key = (String ) k;
-					if (key.startsWith("ElasticCaching")||key.startsWith("DataCache"))
-					{
-						logger.info("VCAP_SERVICES existed with service:"+key);
-						type ="wxs";
-						break;
-					}
 					if (key.startsWith("mongo"))
 					{
 						logger.info("VCAP_SERVICES existed with service:"+key);
-						type ="morphia";
-						break;
-					}
-					if (key.startsWith("redis"))
-					{
-						logger.info("VCAP_SERVICES existed with service:"+key);
-						type ="redis";
-						break;
-					}
-					if (key.startsWith("mysql")|| key.startsWith("cleardb"))
-					{
-						logger.info("VCAP_SERVICES existed with service:"+key);
-						type ="mysql";
-						break;
-					}
-					if (key.startsWith("postgresql"))
-					{
-						logger.info("VCAP_SERVICES existed with service:"+key);
-						type ="postgresql";
-						break;
-					}
-					if (key.startsWith("db2"))
-					{
-						logger.info("VCAP_SERVICES existed with service:"+key);
-						type ="db2";
+						type ="mongo";
 						break;
 					}
 				}
@@ -197,7 +167,8 @@ public class ServiceLocator {
 		serviceType = type;
 		logger.info("ServiceType is now : " + serviceType);
 		if (type ==null) {
-			logger.warning("Can not determine type. Use default service implementation.");			
+			logger.warning("Can not determine type. Use default service implementation (Mongo DB).");
+			serviceType = "mongo";
 		}
 	}
 

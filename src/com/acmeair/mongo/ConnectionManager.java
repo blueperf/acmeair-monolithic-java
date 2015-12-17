@@ -59,7 +59,7 @@ public class ConnectionManager implements MongoConstants{
 		MongoClientOptions.Builder options = new MongoClientOptions.Builder();
 		if(acmeairProps != null){
 			try {
-				logger.info("Reading mongo.properties file");
+				logger.info("Reading ACMEAIR_PROPERTIES");
 				prop.load(new FileInputStream(acmeairProps));
 				if (prop.containsKey("hostname")){
 					hostname = prop.getProperty("hostname");
@@ -173,4 +173,5 @@ public class ConnectionManager implements MongoConstants{
 	public MongoDatabase getDB(){
 		return db;
 	}
-}
+}	
+
