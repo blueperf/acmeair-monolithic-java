@@ -27,7 +27,7 @@ public class MicroServiceFilter implements Filter {
 	private static final String BOOKINGS_CANCEL_PATH = "/rest/api/bookings/cancelbooking";
 	private static final String FLIGHTS_QUERY_PATH = "/rest/api/flights/queryflights";
 	
-	
+	// TODO: Do this smarter?
 	static final String customerServiceLocation = System.getenv("CUSTOMER_SERVICE");
 	static final String customerContextRoot = "/acmeair-cs";
 	
