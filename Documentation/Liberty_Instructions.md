@@ -42,6 +42,7 @@ bin/server create acmeair
 ```
 
 * Copy the web application you previously built  
+
 Windows:
 ```text
 copy %ACMEAIR_SRCDIR%\acmeair-webapp\build\libs\acmeair-webapp-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair\apps\.
@@ -52,7 +53,7 @@ Linux:
 cp $ACMEAIR_SRCDIR/acmeair-webapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair/apps/
 ```
 
-Change $WLP_SERVERDIR/acmeair/server.xml to:  
+* Change $WLP_SERVERDIR/acmeair/server.xml to:  
 ```bash
 <?xml version="1.0" encoding="UTF-8"?>
 <server description="new server">
@@ -96,6 +97,7 @@ bin/server create acmeair-as
 ```
 
 * Copy the web application you previously built  
+
 Windows:
 ```text
 copy %ACMEAIR_SRCDIR%\acmeair-as\build\libs\acmeair-as-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-as\apps\.
@@ -148,6 +150,7 @@ bin/server create acmeair-cs
 ```
 
 * Copy the web application you previously built  
+
 Windows:
 ```text
 copy %ACMEAIR_SRCDIR%\acmeair-as\build\libs\acmeair-cs-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-cs\apps\.
@@ -158,7 +161,7 @@ Linux:
 cp $ACMEAIR_SRCDIR/acmeair-as/build/libs/acmeair-cs-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-cs/apps/
 ```
 
-Change $WLP_SERVERDIR/acmeair-cs/server.xml to:  
+* Change $WLP_SERVERDIR/acmeair-cs/server.xml to:  
 ```bash
 <?xml version="1.0" encoding="UTF-8"?>
 <server description="new server">
@@ -200,6 +203,7 @@ bin/server create acmeair-fbs
 ```
 
 * Copy the web application you previously built  
+
 Windows:
 ```text
 copy %ACMEAIR_SRCDIR%\acmeair-fbs\build\libs\acmeair-fbs-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-fbs\apps\.
@@ -210,7 +214,7 @@ Linux:
 cp $ACMEAIR_SRCDIR/acmeair-fbs/build/libs/acmeair-fbs-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-fbs/apps/
 ```
 
-Change $WLP_SERVERDIR/acmeair-fbs/server.xml to:  
+* Change $WLP_SERVERDIR/acmeair-fbs/server.xml to:  
 ```bash
 <?xml version="1.0" encoding="UTF-8"?>
 <server description="new server">
