@@ -28,6 +28,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.acmeair.AirportCodeMapping;
+
 public abstract class FlightService {
 	protected FlightService(){
 		if (useFlightDataRelatedCaching == null){
@@ -171,9 +173,9 @@ public abstract class FlightService {
 	
 	protected abstract List<String> getFlightBySegment(String segment, Date deptDate);  
 			
-	public abstract void storeAirportMapping(String mapping);
+	public abstract void storeAirportMapping(AirportCodeMapping mapping);
 
-	public abstract void createAirportCodeMapping(String airportCode, String airportName);
+	public abstract AirportCodeMapping createAirportCodeMapping(String airportCode, String airportName);
 	
 	public abstract void createNewFlight(String flightSegmentId,
 			Date scheduledDepartureTime, Date scheduledArrivalTime,
@@ -183,7 +185,7 @@ public abstract class FlightService {
 
 	public abstract void storeFlightSegment(String flightSeg);
 	
-	public abstract void storeFlightSegment(String flightName, String origPort, String destPort, String miles);
+	public abstract void storeFlightSegment(String flightName, String origPort, String destPort, int miles);
 	
 	public abstract Long countFlightSegments();
 	

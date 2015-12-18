@@ -30,6 +30,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.acmeair.AirportCodeMapping;
 import com.acmeair.mongo.ConnectionManager;
 import com.acmeair.mongo.MongoConstants;
 import com.acmeair.service.DataService;
@@ -144,23 +145,15 @@ public class FlightServiceImpl extends FlightService implements  MongoConstants 
 	
 
 	@Override
-	public void storeAirportMapping(String mapping){
-		try {
-			JSONObject mappingJson = (JSONObject) new JSONParser().parse(mapping);
-			createAirportCodeMapping ((String)mappingJson.get("_id"), (String)mappingJson.get("airportName"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void storeAirportMapping(AirportCodeMapping mapping){
+		Document airportDoc = new Document("_id", mapping.getAirportCode())
+		        .append("airportName", mapping.getAirportName());
+		airportCodeMapping.insertOne(airportDoc);
 	}
 	
 	@Override
-	public void createAirportCodeMapping(String airportCode, String airportName) {
-		
-		Document airportDoc = new Document("_id", airportCode)
-        .append("airportName", airportName);
-		
-		airportCodeMapping.insertOne(airportDoc);
+	public AirportCodeMapping createAirportCodeMapping(String airportCode, String airportName) {
+		return new AirportCodeMapping(airportCode,airportName);
 	}
 	
 	@Override
@@ -190,7 +183,7 @@ public class FlightServiceImpl extends FlightService implements  MongoConstants 
 			storeFlightSegment ((String)flightSegJson.get("_id"), 
 					(String)flightSegJson.get("originPort"), 
 					(String)flightSegJson.get("destPort"), 
-					(String)flightSegJson.get("miles"));
+					(int)flightSegJson.get("miles"));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -198,7 +191,7 @@ public class FlightServiceImpl extends FlightService implements  MongoConstants 
 	}
 
 	@Override 
-	public void storeFlightSegment(String flightName, String origPort, String destPort, String miles) {
+	public void storeFlightSegment(String flightName, String origPort, String destPort, int miles) {
 		Document flightSegmentDoc = new Document("_id", flightName)
         .append("originPort", origPort)
         .append("destPort", destPort)

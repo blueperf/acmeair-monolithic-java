@@ -22,6 +22,7 @@ project(':acmeair-webapp') {
     dependencies {
         compile project(':acmeair-services')
         compile project(':acmeair-services-mongo')
+          compile project(':acmeair-loader')
         providedRuntime 'javax:javaee-web-api:7.0'
     }
 }
@@ -71,6 +72,11 @@ project(':acmeair-services') {
     }
 }
 
+project(':acmeair-loader') {
+    dependencies {
+        compile project(':acmeair-services')
+    }
+}
 
 
 

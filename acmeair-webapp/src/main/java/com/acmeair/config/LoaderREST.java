@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-//import com.acmeair.loader.Loader;
+import com.acmeair.loader.Loader;
 
 
 @Path("/loader")
@@ -20,7 +20,7 @@ public class LoaderREST {
 /*
  * Disabling to test out the new acmeair code frist
  */
-/*
+
 	@Inject
 	private Loader loader;	
 	
@@ -40,5 +40,5 @@ public class LoaderREST {
 		String response = loader.loadDB(numCustomers);
 		return Response.ok(response).build();	
 	}
-*/
+
 }

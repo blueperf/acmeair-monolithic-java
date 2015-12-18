@@ -28,7 +28,7 @@ export WLP_SERVERDIR=~/work/java/wlp
 ```
 
 
-## Create the WebSphere Liberty server and then deploy the application(s)
+## Create the WebSphere Liberty server and then deploy the application
 Windows:
 ```text
 cd %WLP_SERVERDIR%
@@ -82,33 +82,39 @@ cp $ACMEAIR_SRCDIR/acmeair-webapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war $
 
 ## MicroService Mode (optional): Create the three additional WebSphere Liberty servers
 
-### Authentication Service
-
 Windows:
 ```text
 cd %WLP_SERVERDIR%
-bin\server create acemair-as
+bin\server.bat create acemair-as
+bin\server.bat create acemair-cs
+bin\server.bat create acemair-fbs
 ```
 
 Linux:
 ```text
 cd $WLP_SERVERDIR
 bin/server create acmeair-as
+bin/server create acmeair-cs
+bin/server create acmeair-fbs
 ```
 
-* Copy the web application you previously built  
+* Copy the web applications you previously built  
 
 Windows:
 ```text
-copy %ACMEAIR_SRCDIR%\acmeair-as\build\libs\acmeair-as-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-as\apps\.
+copy %ACMEAIR_SRCDIR%\acmeair-as\build\libs\acmeair-as-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-as\apps\
+copy %ACMEAIR_SRCDIR%\acmeair-cs\build\libs\acmeair-as-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-cs\apps\.
+copy %ACMEAIR_SRCDIR%\acmeair-fbs\build\libs\acmeair-as-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-fbs\apps\.
 ```
 
 Linux:
 ```text
 cp $ACMEAIR_SRCDIR/acmeair-as/build/libs/acmeair-as-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-as/apps/
+cp $ACMEAIR_SRCDIR/acmeair-cs/build/libs/acmeair-as-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-cs/apps/
+cp $ACMEAIR_SRCDIR/acmeair-fbs/build/libs/acmeair-as-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-fbs/apps/
 ```
 
-Change $WLP_SERVERDIR/acmeair-as/server.xml to:  
+* Change $WLP_SERVERDIR/acmeair-as/server.xml to:  
 ```bash
 <?xml version="1.0" encoding="UTF-8"?>
 <server description="new server">
@@ -133,32 +139,6 @@ Change $WLP_SERVERDIR/acmeair-as/server.xml to:
     <jndiEntry jndiName="com/acmeair/repository/type" value="mongo"/>
 
 </server>
-```
-
-### Customer Service
-
-Windows:
-```text
-cd %WLP_SERVERDIR%
-bin\server create acemair-cs
-```
-
-Linux:
-```text
-cd $WLP_SERVERDIR
-bin/server create acmeair-cs
-```
-
-* Copy the web application you previously built  
-
-Windows:
-```text
-copy %ACMEAIR_SRCDIR%\acmeair-as\build\libs\acmeair-cs-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-cs\apps\.
-```
-
-Linux:
-```text
-cp $ACMEAIR_SRCDIR/acmeair-as/build/libs/acmeair-cs-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-cs/apps/
 ```
 
 * Change $WLP_SERVERDIR/acmeair-cs/server.xml to:  
@@ -186,32 +166,6 @@ cp $ACMEAIR_SRCDIR/acmeair-as/build/libs/acmeair-cs-2.0.0-SNAPSHOT.war $WLP_SERV
     <jndiEntry jndiName="com/acmeair/repository/type" value="mongo"/>
 
 </server>
-```
-
-### Flight Booking Service
-
-Windows:
-```text
-cd %WLP_SERVERDIR%
-bin\server create acemair-fbs
-```
-
-Linux:
-```text
-cd $WLP_SERVERDIR
-bin/server create acmeair-fbs
-```
-
-* Copy the web application you previously built  
-
-Windows:
-```text
-copy %ACMEAIR_SRCDIR%\acmeair-fbs\build\libs\acmeair-fbs-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-fbs\apps\.
-```
-
-Linux:
-```text
-cp $ACMEAIR_SRCDIR/acmeair-fbs/build/libs/acmeair-fbs-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-fbs/apps/
 ```
 
 * Change $WLP_SERVERDIR/acmeair-fbs/server.xml to:  
@@ -294,5 +248,18 @@ http://localhost:9090/acmeair-webapp
 
 ## Now we will load sample data using the web loader
 
-* Loader not currently working
+Click on the "configure the Acme Air environment." link at the bottom of the page, or alternatively go to 
+```text
+http://localhost:9090/acmeair-webapp/loader.html
+```
+
+You can change the value for how many customers you wish to have loaded.  The default of 200 customer to load will be displayed. 
+* After clicking on the "Load the Database" button you should see output that indicates flights and customers (200) were loaded. 
+
+
+You will now be able to log in, click on the "Acme Air Home" link at either the top or bottom of the page to return to the welcome page. 
+
+* Login (use the provided credentials), search for flights (suggest today between Paris and New York), book the flights, use the checkin link to cancel the bookings one at a time, view your account profile
+
+
 
