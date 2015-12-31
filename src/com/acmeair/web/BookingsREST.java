@@ -15,6 +15,8 @@
 *******************************************************************************/
 package com.acmeair.web;
 
+import java.util.logging.Level;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -25,11 +27,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.acmeair.AcmeAirConstants;
 import com.acmeair.service.BookingService;
 import com.acmeair.service.ServiceLocator;
 
 @Path("/bookings")
-public class BookingsREST {
+public class BookingsREST implements AcmeAirConstants {
 	
 	private BookingService bs = ServiceLocator.instance().getService(BookingService.class);
 	
@@ -44,6 +47,10 @@ public class BookingsREST {
 			@FormParam("retFlightId") String retFlightId,
 			@FormParam("retFlightSegId") String retFlightSegId,
 			@FormParam("oneWayFlight") boolean oneWay) {
+	
+		if(logger.isLoggable(Level.FINE)){
+			logger.fine("booking flights");
+		}
 		try {
 			String bookingIdTo = bs.bookFlight(userid, toFlightSegId, toFlightId);
 			
@@ -83,6 +90,11 @@ public class BookingsREST {
 	@Path("/byuser/{user}")
 	@Produces("text/plain")
 	public String getBookingsByUser(@PathParam("user") String user) {
+
+		if(logger.isLoggable(Level.FINE)){
+			logger.fine("listing booked flights by user " + user);
+		}
+		
 		try {
 			return  bs.getBookingsByUser(user).toString();
 		}

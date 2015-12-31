@@ -2,12 +2,10 @@ package com.acmeair.mongo;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Logger;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -24,8 +22,6 @@ import com.mongodb.client.MongoDatabase;
 public class ConnectionManager implements MongoConstants{
 
 	private static AtomicReference<ConnectionManager> connectionManager = new AtomicReference<ConnectionManager>();
-	
-	private final static Logger logger = Logger.getLogger(ConnectionManager.class.getName());
 	
 	protected MongoClient mongoClient;
 	protected MongoDatabase db;

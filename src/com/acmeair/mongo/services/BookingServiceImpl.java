@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -17,7 +16,6 @@ import com.acmeair.mongo.ConnectionManager;
 import com.acmeair.mongo.MongoConstants;
 import com.acmeair.service.BookingService;
 import com.acmeair.service.DataService;
-import com.acmeair.service.FlightService;
 import com.acmeair.service.KeyGenerator;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -29,7 +27,6 @@ public class BookingServiceImpl implements BookingService, MongoConstants {
 
 	//private final static Logger logger = Logger.getLogger(BookingService.class.getName()); 
 
-	protected Logger logger =  Logger.getLogger(FlightService.class.getName());	
 	private MongoCollection<Document> booking;
 	
 	@Inject 

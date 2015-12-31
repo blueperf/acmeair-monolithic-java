@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -26,11 +27,12 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import com.acmeair.AcmeAirConstants;
 import com.acmeair.service.FlightService;
 import com.acmeair.service.ServiceLocator;
 
 @Path("/flights")
-public class FlightsREST {
+public class FlightsREST implements AcmeAirConstants {
 	
 	private FlightService flightService = ServiceLocator.instance().getService(FlightService.class);
 	
@@ -46,7 +48,9 @@ public class FlightsREST {
 			@FormParam("returnDate") Date returnDate,
 			@FormParam("oneWay") boolean oneWay
 			) {
-		
+		if(logger.isLoggable(Level.FINE)){
+			logger.fine("querying flights");
+		}
 		String options = "";
 		
 		// convert date to local timezone
@@ -59,6 +63,11 @@ public class FlightsREST {
 		tempDate.set(Calendar.MILLISECOND, 0);
 		
 		List<String> toFlights = flightService.getFlightByAirportsAndDepartureDate(fromAirport, toAirport, tempDate.getTime());
+
+		if(logger.isLoggable(Level.FINE)){
+			logger.fine("flightsOutbound = " + toFlights);
+		}
+
 		
 		if (!oneWay) {
 			// convert date to local timezone
@@ -69,6 +78,10 @@ public class FlightsREST {
 			tempDate.set(Calendar.SECOND, 0);
 			tempDate.set(Calendar.MILLISECOND, 0);
 			List<String> retFlights = flightService.getFlightByAirportsAndDepartureDate(toAirport, fromAirport, tempDate.getTime());
+
+			if(logger.isLoggable(Level.FINE)){
+				logger.fine("flightsReturn = " + retFlights);
+			}
 
 			options = "{\"tripFlights\":" + 
 					"[{\"numPages\":1,\"flightsOptions\": " + toFlights + ",\"currentPage\":0,\"hasMoreOptions\":false,\"pageSize\":10}, " + 

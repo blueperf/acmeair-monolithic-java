@@ -87,8 +87,8 @@ public class FlightServiceImpl extends FlightService implements  MongoConstants 
 		try {
 			return flightSegment.find(new BasicDBObject("originPort", fromAirport).append("destPort", toAirport)).first().toJson();
 		}catch (java.lang.NullPointerException e){
-			if(logger.isLoggable(Level.FINE)){
-				logger.fine("getFlghSegment returned no flightSegment available");
+			if(MongoConstants.logger.isLoggable(Level.FINE)){
+				MongoConstants.logger.fine("getFlghSegment returned no flightSegment available");
 			}
 			return "";
 		}
@@ -101,8 +101,8 @@ public class FlightServiceImpl extends FlightService implements  MongoConstants 
 			MongoCursor<Document> cursor;
 
 			if(deptDate != null) {
-				if(logger.isLoggable(Level.FINE)){
-					logger.fine("getFlghtBySegment Search String : " + new BasicDBObject("flightSegmentId", segmentJson.get("_id")).append("scheduledDepartureTime", deptDate).toJson());
+				if(MongoConstants.logger.isLoggable(Level.FINE)){
+					MongoConstants.logger.fine("getFlghtBySegment Search String : " + new BasicDBObject("flightSegmentId", segmentJson.get("_id")).append("scheduledDepartureTime", deptDate).toJson());
 				}
 				cursor = flight.find(new BasicDBObject("flightSegmentId", segmentJson.get("_id")).append("scheduledDepartureTime", deptDate)).iterator();
 			} else {
@@ -114,8 +114,8 @@ public class FlightServiceImpl extends FlightService implements  MongoConstants 
 				while(cursor.hasNext()){
 					Document tempDoc = cursor.next();
 
-					if(logger.isLoggable(Level.FINE)){
-						logger.fine("getFlghtBySegment Before : " + tempDoc.toJson());
+					if(MongoConstants.logger.isLoggable(Level.FINE)){
+						MongoConstants.logger.fine("getFlghtBySegment Before : " + tempDoc.toJson());
 					}
 					
 					Date deptTime = (Date)tempDoc.get("scheduledDepartureTime");
@@ -125,8 +125,8 @@ public class FlightServiceImpl extends FlightService implements  MongoConstants 
 					tempDoc.remove("scheduledArrivalTime");
 					tempDoc.append("scheduledArrivalTime", arvTime.toString());					
 
-					if(logger.isLoggable(Level.FINE)){
-						logger.fine("getFlghtBySegment after : " + tempDoc.toJson());
+					if(MongoConstants.logger.isLoggable(Level.FINE)){
+						MongoConstants.logger.fine("getFlghtBySegment after : " + tempDoc.toJson());
 					}
 
 					flights.add(tempDoc.append("flightSegment", segmentJson).toJson());

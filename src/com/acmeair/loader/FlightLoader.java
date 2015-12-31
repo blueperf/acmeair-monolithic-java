@@ -25,18 +25,16 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import com.acmeair.AcmeAirConstants;
 import com.acmeair.service.FlightService;
 import com.acmeair.service.ServiceLocator;
 
 
 
 
-public class FlightLoader {
+public class FlightLoader implements AcmeAirConstants {
 	
-	protected Logger logger =  Logger.getLogger(FlightService.class.getName());
-
 
 	private FlightService flightService = ServiceLocator.instance().getService(FlightService.class);
 
@@ -98,10 +96,6 @@ public class FlightLoader {
 				}				
 				flightService.storeFlightSegment(flightId, code, toAirport, milesString);
 				Date now = new Date();
-				
-				Properties prop = new Properties();
-				String acmeairProps = System.getenv("ACMEAIR_PROPERTIES");
-
 				
 				for (int daysFromNow = 0; daysFromNow < maxDaysToScheduleFlights; daysFromNow++) {
 					Calendar c = Calendar.getInstance();

@@ -28,7 +28,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public abstract class FlightService {
+import com.acmeair.AcmeAirConstants;
+import com.acmeair.mongo.MongoConstants;
+
+public abstract class FlightService implements AcmeAirConstants {
 	protected FlightService(){
 		if (useFlightDataRelatedCaching == null){
 			Properties properties = new Properties();
@@ -50,8 +53,6 @@ public abstract class FlightService {
 		}
 	}
 	
-	protected Logger logger =  Logger.getLogger(FlightService.class.getName());
-	
 	protected static Boolean useFlightDataRelatedCaching = null;
 	protected static String acmeairDir = "";
 	
@@ -64,8 +65,8 @@ public abstract class FlightService {
 
 	public String getFlightByFlightId(String flightId, String flightSegment) {
 		try {
-			if(logger.isLoggable(Level.FINE)){
-				logger.fine("Book flights with "+ flightId + " and " + flightSegment);
+			if(logger.isLoggable(Level.FINEST)){
+				logger.finest("Book flights with "+ flightId + " and " + flightSegment);
 			}
 			if (useFlightDataRelatedCaching){
 				String flight = flightPKtoFlightCache.get(flightId);
@@ -105,7 +106,7 @@ public abstract class FlightService {
 			segment = getFlightSegment(fromAirport, toAirport);
 		}
 		if(logger.isLoggable(Level.FINE)){
-			logger.fine("Segment "+ segment);
+			logger.fine("flightsegment = "+ segment);
 		}
 		// cache flights that not available (checks against sentinel value above indirectly)
 		try{
@@ -113,42 +114,45 @@ public abstract class FlightService {
 				return new ArrayList<String>();
 			}
 			JSONObject segmentJson = (JSONObject) new JSONParser().parse(segment);
-			if(logger.isLoggable(Level.FINE)){
-				logger.fine("Segment in JSON "+ segmentJson);
+			if(logger.isLoggable(Level.FINEST)){
+				logger.finest("Segment in JSON "+ segmentJson);
 			}
 			String segId = (String)segmentJson.get("_id");
 			if (segId == null) {
-				if(logger.isLoggable(Level.FINE)){
-					logger.fine("Segment is null");
+				if(logger.isLoggable(Level.FINEST)){
+					logger.finest("Segment is null");
 				}
 				return new ArrayList<String>(); 
 			}
 
 			String flightSegmentIdAndScheduledDepartureTimeQueryString = segId + deptDate.toString();
-			if(logger.isLoggable(Level.FINE)){
-				logger.fine("flightSegmentIdAndScheduledDepartureTimeQueryString "+ flightSegmentIdAndScheduledDepartureTimeQueryString);
+			if(logger.isLoggable(Level.FINEST)){
+				logger.finest("flightSegmentIdAndScheduledDepartureTimeQueryString "+ flightSegmentIdAndScheduledDepartureTimeQueryString);
 			}
 			if (useFlightDataRelatedCaching){
 				List<String> flights = flightSegmentAndDataToFlightCache.get(flightSegmentIdAndScheduledDepartureTimeQueryString);
+				if(logger.isLoggable(Level.FINE)){
+					logger.fine("cache hit - flight search, key = "+ flightSegmentIdAndScheduledDepartureTimeQueryString);
+				}
 				if (flights == null) {				
 					flights = getFlightBySegment(segment, deptDate);
 					if(logger.isLoggable(Level.FINE)){
-						logger.fine("flights search results if flights cache is null "+ flights.toString());
+						logger.fine("cache miss - flight search, key = " + flightSegmentIdAndScheduledDepartureTimeQueryString + " flightCache size = " + flights.size());
 					}
 
 					flightSegmentAndDataToFlightCache.putIfAbsent(flightSegmentIdAndScheduledDepartureTimeQueryString, flights);
 				}
-				if(logger.isLoggable(Level.FINEST))
-					logger.finest("Returning "+ flights);
+				if(logger.isLoggable(Level.FINE))
+					logger.fine("Returning "+ flights);
 				return flights;
 			}else {
-				if(logger.isLoggable(Level.FINE)){
-					logger.fine("useFlightDataRelatedCaching is false ");
+				if(logger.isLoggable(Level.FINEST)){
+					logger.finest("useFlightDataRelatedCaching is false ");
 				}
 
 				List<String> flights = getFlightBySegment(segment, deptDate);
-				if(logger.isLoggable(Level.FINEST))
-					logger.finest("Returning "+ flights);
+				if(logger.isLoggable(Level.FINE))
+					logger.fine("Returning "+ flights);
 				return flights;
 			}
 		} catch (ParseException e) {

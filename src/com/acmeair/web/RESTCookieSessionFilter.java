@@ -16,6 +16,7 @@
 package com.acmeair.web;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
@@ -29,10 +30,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acmeair.AcmeAirConstants;
 import com.acmeair.service.CustomerService;
 import com.acmeair.service.ServiceLocator;
 
-public class RESTCookieSessionFilter implements Filter {
+public class RESTCookieSessionFilter implements Filter,AcmeAirConstants {
 	
 	static final String LOGIN_USER = "acmeair.login_user";
 	private static final String LOGIN_PATH = "/rest/api/login";
@@ -54,6 +56,10 @@ public class RESTCookieSessionFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)resp;
 		
+		if(logger.isLoggable(Level.FINE)){
+			logger.fine("checkForValidCookie");
+		}
+
 		String path = request.getContextPath() + request.getServletPath() + request.getPathInfo();
 	
 		
@@ -79,6 +85,9 @@ public class RESTCookieSessionFilter implements Filter {
 			// did this check as the logout currently sets the cookie value to "" instead of aging it out
 			// see comment in LogingREST.java
 			if (sessionId.equals("")) {
+				if(logger.isLoggable(Level.FINE)){
+					logger.fine("checkForValidCookie - no sessionid cookie so returning 403");
+				}
 				response.sendError(HttpServletResponse.SC_FORBIDDEN);
 				return;
 			}
@@ -87,15 +96,24 @@ public class RESTCookieSessionFilter implements Filter {
 			if (cs != null) {
 				request.setAttribute(LOGIN_USER, cs);
 				chain.doFilter(req, resp);
+				if(logger.isLoggable(Level.FINE)){
+					logger.fine("checkForValidCookie - good session so allowing next route handler to be called");
+				}
 				return;
 			}
 			else {
+				if(logger.isLoggable(Level.FINE)){
+					logger.fine("checkForValidCookie - no sessionid cookie so returning 403");
+				}
 				response.sendError(HttpServletResponse.SC_FORBIDDEN);
 				return;
 			}
 		}
 		
 		// if we got here, we didn't detect the session cookie, so we need to return 404
+		if(logger.isLoggable(Level.FINE)){
+			logger.fine("checkForValidCookie - no sessionid cookie so returning 403");
+		}
 		response.sendError(HttpServletResponse.SC_FORBIDDEN);
 	}
 
