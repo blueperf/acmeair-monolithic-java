@@ -1,20 +1,83 @@
-version '1.0'
-group 'com.company.project'
 
-apply plugin: 'java'
-apply plugin: 'maven'
-
-repositories {
-    mavenCentral()
+task wrapper(type: Wrapper) {
+   gradleVersion = '2.6'
 }
 
-configurations {
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+        compile 'javax:javaee-web-api:7.0'
+    }
 }
 
-sourceSets {
+project(':acmeair-webapp') {
+    apply plugin: 'war'
+
+    dependencies {
+        compile project(':acmeair-services')
+        compile project(':acmeair-services-mongo')
+          compile project(':acmeair-loader')
+        providedRuntime 'javax:javaee-web-api:7.0'
+    }
 }
 
-dependencies {
-  compile 'com.googlecode.json-simple:json-simple:1.1.1'
-  compile 'org.mongodb:mongo-java-driver:3.1.1'
+project(':acmeair-as') {
+    apply plugin: 'war'
+
+    dependencies {
+        compile project(':acmeair-services')
+        compile project(':acmeair-services-mongo')
+        providedRuntime 'javax:javaee-web-api:7.0'
+    }
 }
+
+project(':acmeair-cs') {
+    apply plugin: 'war'
+
+    dependencies {
+        compile project(':acmeair-services')
+        compile project(':acmeair-services-mongo')
+        providedRuntime 'javax:javaee-web-api:7.0'
+    }
+}
+
+project(':acmeair-fbs') {
+    apply plugin: 'war'
+
+    dependencies {
+        compile project(':acmeair-services')
+        compile project(':acmeair-services-mongo')
+        providedRuntime 'javax:javaee-web-api:7.0'
+    }
+}
+
+project(':acmeair-services-mongo') {
+    dependencies {
+		compile project(':acmeair-services')
+		compile 'org.mongodb:mongo-java-driver:3.1.1'
+		compile 'org.mongodb:bson:3.1.1'
+        compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    }
+}
+
+project(':acmeair-services') {
+    dependencies {
+        compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    }
+}
+
+project(':acmeair-loader') {
+    dependencies {
+        compile project(':acmeair-services')
+    }
+}
+
+
+
+
