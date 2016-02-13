@@ -119,6 +119,12 @@ public class ConnectionManager implements MongoConstants{
 				for (Object key : vcapServices.keySet()){
 					if (key.toString().startsWith("mongo")){
 						mongoServiceArray = (JSONArray) vcapServices.get(key);
+						logger.info("Service Type : MongoLAB - " + key.toString());
+						break;
+					}
+					if (key.toString().startsWith("user-provided")){
+						mongoServiceArray = (JSONArray) vcapServices.get(key);
+						logger.info("Service Type : MongoDB by Compost - " + key.toString());
 						break;
 					}
 				}
