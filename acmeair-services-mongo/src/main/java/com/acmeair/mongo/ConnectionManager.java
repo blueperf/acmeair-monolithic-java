@@ -130,7 +130,7 @@ public class ConnectionManager implements MongoConstants{
 				}
 				
 				if (mongoServiceArray == null) {
-					logger.severe("VCAP_SERVICES existed, but a mongo service was not definied.");
+					logger.severe("VCAP_SERVICES existed, but a MongoLAB or MongoDB by COMPOST service was not definied.");
 				} else {					
 					JSONObject mongoService = (JSONObject)mongoServiceArray.get(0); 
 					JSONObject credentials = (JSONObject)mongoService.get("credentials");
