@@ -54,13 +54,23 @@ public class ConnectionManager implements MongoConstants{
 
 		Properties prop = new Properties();
 		String acmeairProps = System.getenv("ACMEAIR_PROPERTIES");
-
+		try {
+			if(acmeairProps != null){
+				prop.load(new FileInputStream(acmeairProps));			
+			}else {
+				prop.load(ConnectionManager.class.getResourceAsStream("/config.properties"));
+				acmeairProps = "OK";
+			}
+		}catch (IOException ex){
+			logger.info("Properties file does not exist" + ex.getMessage());
+			acmeairProps = null;
+		}
+		
 		ServerAddress dbAddress = null;
 		MongoClientOptions.Builder options = new MongoClientOptions.Builder();
 		if(acmeairProps != null){
 			try {
 				logger.info("Reading mongo.properties file");
-				prop.load(new FileInputStream(acmeairProps));
 				if (prop.containsKey("hostname")){
 					hostname = prop.getProperty("hostname");
 				}
@@ -101,7 +111,7 @@ public class ConnectionManager implements MongoConstants{
 					options.threadsAllowedToBlockForConnectionMultiplier(Integer.parseInt(prop.getProperty("threadsAllowedToBlockForConnectionMultiplier")));
 				}
 				
-			}catch (IOException ioe){
+			}catch (Exception ioe){
 				logger.severe("Exception when trying to read from the mongo.properties file" + ioe.getMessage());
 			}
 		}
@@ -156,7 +166,8 @@ public class ConnectionManager implements MongoConstants{
 			}
 			
 			db = mongoClient.getDatabase(dbname);
-
+			logger.info("#### Mongo DB Server " + mongoClient.getAddress().getHost() + " ####");
+			logger.info("#### Mongo DB Port " + mongoClient.getAddress().getPort() + " ####");
 			logger.info("#### Mongo DB is created with DB name " + dbname + " ####");
 			logger.info("#### MongoClient Options ####");
 			logger.info("maxConnectionsPerHost : "+ builtOptions.getConnectionsPerHost());
