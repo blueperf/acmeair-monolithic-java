@@ -140,7 +140,18 @@ public class ConnectionManager implements MongoConstants{
 				}
 				
 				if (mongoServiceArray == null) {
-					logger.severe("VCAP_SERVICES existed, but a MongoLAB or MongoDB by COMPOST service was not definied.");
+					logger.info("VCAP_SERVICES existed, but a MongoLAB or MongoDB by COMPOST service was not definied. Trying DB resource");
+					//VCAP_SERVICES don't exist, so use the DB resource
+					dbAddress = new ServerAddress (hostname, port);
+
+					// If username & password exists, connect DB with username & password
+					if ((username == null)||(password == null)){
+						mongoClient = new MongoClient(dbAddress, builtOptions);
+					}else {
+						List<MongoCredential> credentials = new ArrayList<>();
+						credentials.add(MongoCredential.createCredential(username, dbname, password.toCharArray()));
+						mongoClient = new MongoClient(dbAddress,credentials, builtOptions);
+					}
 				} else {					
 					JSONObject mongoService = (JSONObject)mongoServiceArray.get(0); 
 					JSONObject credentials = (JSONObject)mongoService.get("credentials");
