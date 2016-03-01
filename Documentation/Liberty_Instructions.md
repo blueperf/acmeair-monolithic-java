@@ -261,7 +261,7 @@ You will now be able to log in, click on the "Acme Air Home" link at either the 
 
 * Login (use the provided credentials), search for flights (suggest today between Paris and New York), book the flights, use the checkin link to cancel the bookings one at a time, view your account profile
  
-* (Optional) Load the sample data from command line -  Use curl to load the data as follows:
+(Optional) Load the sample data from command line -  Use curl to load the data as follows:
 * curl http://<host>:<port>/<apppath>/rest/info/loader/load?numCustomers=200
 
 
