@@ -264,5 +264,29 @@ You will now be able to log in, click on the "Acme Air Home" link at either the 
 (Optional) Load the sample data from command line -  Use curl to load the data as follows:
 * curl http://**HOSTNAME:PORT/APPPATH**/rest/info/loader/load?numCustomers=200
 
+## Remote Mongo DB Configuration for Runtime
+
+To specify different values, set the following environment variable:
+export ACMEAIR_PROPERTIES=/opt/BLUEMIX/acmeair/acmeair.properties OR set ACMEAIR_PROPERTIES=/opt/BLUEMIX/acmeair/mongodb.properties
+
+Within the properties file, you can configure the following:
+
+Name | Default | Meaning
+--- |:---:| ---
+userFlightDataRelatedCaching | false | Flight Data to be cached (for workaround for the table join)
+hostname | localhost | MongoDB hostname
+port | 27017 | MongoDB port number
+dbname | acmeair | MongoDB database name
+username|none | comment out if there is no security in Mongo DB 
+password|none | comment out if there is no security in Mongo DB 
+connectionsPerHost| 100 | comment out to use default
+minConnectionsPerHost| 0 | comment out to use default 
+maxWaitTime| 120000 |  comment out to use default
+connectTimeout| 10000 |  comment out to use default
+socketTimeout| 0 |  comment out to use default
+socketKeepAlive| false |  comment out to use default
+sslEnabled| false | comment out to use default
+threadsAllowedToBlockForConnectionMultiplier| 5 | comment out to use default
+ 
 
 
