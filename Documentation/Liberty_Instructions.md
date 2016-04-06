@@ -267,7 +267,7 @@ You will now be able to log in, click on the "Acme Air Home" link at either the 
 ## Remote Mongo DB Configuration for Runtime
 
 To specify different values, set the following environment variable:
-export ACMEAIR_PROPERTIES=/opt/BLUEMIX/acmeair/acmeair.properties OR set ACMEAIR_PROPERTIES=/opt/BLUEMIX/acmeair/mongodb.properties
+export ACMEAIR_PROPERTIES=/opt/BLUEMIX/acmeair/mongodb.properties OR set ACMEAIR_PROPERTIES=/opt/BLUEMIX/acmeair/mongodb.properties
 
 Within the properties file, you can configure the following:
 
