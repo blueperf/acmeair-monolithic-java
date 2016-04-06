@@ -289,10 +289,10 @@ sslEnabled| false | comment out to use default
 threadsAllowedToBlockForConnectionMultiplier| 5 | comment out to use default
  
 Example:<br/>
-userFlightDataRelatedCaching=true
-hostname=omni.canlab.ibm.com
-port=27017
-dbname=acmeair
+userFlightDataRelatedCaching=true<br/>
+hostname=omni.canlab.ibm.com<br/>
+port=27017<br/>
+dbname=acmeair<br/>
 
 
 
