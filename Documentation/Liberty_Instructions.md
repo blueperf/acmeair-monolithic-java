@@ -293,15 +293,5 @@ userFlightDataRelatedCaching=true
 hostname=omni.canlab.ibm.com
 port=27017
 dbname=acmeair
-#username=dbuser
-#password=1234
-#connectionsPerHost=
-#minConnectionsPerHost=
-#maxWaitTime=
-#connectTimeout=
-#socketTimeout=
-#socketKeepAlive=
-#sslEnabled=
-#threadsAllowedToBlockForConnectionMultiplier=
 
 
