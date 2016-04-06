@@ -288,7 +288,7 @@ socketKeepAlive| false |  comment out to use default
 sslEnabled| false | comment out to use default
 threadsAllowedToBlockForConnectionMultiplier| 5 | comment out to use default
  
-Example:
+Example:<br/>
 userFlightDataRelatedCaching=true
 hostname=omni.canlab.ibm.com
 port=27017
