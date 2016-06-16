@@ -1,0 +1,11 @@
+FROM websphere-liberty:kernel
+COPY ./server.xml /config/
+COPY ./acmeair.properties /opt/ibm/
+RUN installUtility install --acceptLicense defaultServer
+
+EXPOSE 80
+ENV VCAP_APP_PORT=80
+ENV SERVICE_NAME=webapp
+ENV ACMEAIR_PROPERTIES=/opt/ibm/acmeair.properties
+
+ADD ./build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war /config/apps/
