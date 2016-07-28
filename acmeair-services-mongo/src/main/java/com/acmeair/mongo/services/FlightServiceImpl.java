@@ -199,4 +199,11 @@ public class FlightServiceImpl extends FlightService implements  MongoConstants 
 		
 		flightSegment.insertOne(flightSegmentDoc);
 	}
+
+	@Override
+	public void dropFlights() {
+		airportCodeMapping.deleteMany(new Document());
+		flightSegment.deleteMany(new Document());
+		flight.deleteMany(new Document());
+	}
 }

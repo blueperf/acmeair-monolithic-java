@@ -163,7 +163,7 @@ public class ServiceLocator {
 					if (key.startsWith("mongo"))
 					{
 						logger.info("VCAP_SERVICES existed with service:"+key);
-						type ="morphia";
+						type ="mongo";
 						break;
 					}
 					if (key.startsWith("redis"))

@@ -5,14 +5,6 @@
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
   <filter>
-    <filter-name>MicroServiceFilter</filter-name>
-    <filter-class>com.acmeair.web.MicroServiceFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>MicroServiceFilter</filter-name>
-    <url-pattern>/rest/api/*</url-pattern>
-  </filter-mapping>
-  <filter>
     <filter-name>CookieFilter</filter-name>
     <filter-class>com.acmeair.web.RESTCookieSessionFilter</filter-class>
   </filter>

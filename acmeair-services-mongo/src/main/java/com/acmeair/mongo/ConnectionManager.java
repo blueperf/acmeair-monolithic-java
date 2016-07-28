@@ -2,7 +2,6 @@ package com.acmeair.mongo;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -51,7 +50,6 @@ public class ConnectionManager implements MongoConstants{
 		String username = null;
 		String password = null;
 
-
 		Properties prop = new Properties();
 		String acmeairProps = System.getenv("ACMEAIR_PROPERTIES");
 		try {
@@ -71,11 +69,18 @@ public class ConnectionManager implements MongoConstants{
 		if(acmeairProps != null){
 			try {
 				logger.info("Reading mongo.properties file");
-				if (prop.containsKey("hostname")){
+				if (System.getenv("MONGO_HOST") != null) {
+					hostname = System.getenv("MONGO_HOST");
+				} else if (prop.containsKey("hostname")){
 					hostname = prop.getProperty("hostname");
 				}
-				if (prop.containsKey("port")){
+				if (System.getenv("MONGO_PORT") != null) {
+					port=Integer.parseInt(System.getenv("MONGO_PORT"));
+				} else if (prop.containsKey("port")){
 					port = Integer.parseInt(prop.getProperty("port"));
+				}
+				if (System.getenv("MONGO_DBNAME") != null) {
+					dbname = System.getenv("MONGO_DBNAME");
 				}
 				if (prop.containsKey("dbname")){
 					dbname = prop.getProperty("dbname");
@@ -117,7 +122,7 @@ public class ConnectionManager implements MongoConstants{
 		}
 
 		MongoClientOptions builtOptions = options.build();
-
+		
 		try {
 			//Check if VCAP_SERVICES exist, and if it does, look up the url from the credentials.
 			String vcapJSONString = System.getenv("VCAP_SERVICES");
@@ -163,6 +168,7 @@ public class ConnectionManager implements MongoConstants{
 					
 				}
 			}else {
+				
 				//VCAP_SERVICES don't exist, so use the DB resource
 				dbAddress = new ServerAddress (hostname, port);
 

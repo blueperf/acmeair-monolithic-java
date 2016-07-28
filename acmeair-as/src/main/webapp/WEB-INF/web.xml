@@ -11,4 +11,8 @@
     <servlet-name>com.acmeair.web.AcmeAirApp</servlet-name>
     <url-pattern>/rest/api/*</url-pattern>
   </servlet-mapping>
+  <listener>
+    <description>Service Discovery Registration Service</description>
+    <listener-class>com.acmeair.util.ServiceRegister</listener-class>
+  </listener>
 </web-app>

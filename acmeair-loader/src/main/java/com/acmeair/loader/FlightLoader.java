@@ -28,11 +28,16 @@ import com.acmeair.AirportCodeMapping;
 
 public class FlightLoader {
 	
-	private static final int MAX_FLIGHTS_PER_SEGMENT = 30;
+	private static final int MAX_FLIGHTS_PER_SEGMENT = 5;
 	
 
 	private FlightService flightService = ServiceLocator.instance().getService(FlightService.class);
 
+	public void dropFlights() {				
+		flightService.dropFlights();
+}
+	
+	
 	public void loadFlights() throws Exception {
 		InputStream csvInputStream = FlightLoader.class.getResourceAsStream("/mileage.csv");
 		
@@ -84,7 +89,7 @@ public class FlightLoader {
 				String flightId = "AA" + flightNumber;			
 				flightService.storeFlightSegment(flightId, airportCode, toAirport, miles);
 				Date now = new Date();
-				for (int daysFromNow = 0; daysFromNow < MAX_FLIGHTS_PER_SEGMENT; daysFromNow++) {
+				for (int daysFromNow = -1; daysFromNow < MAX_FLIGHTS_PER_SEGMENT; daysFromNow++) {
 					Calendar c = Calendar.getInstance();
 					c.setTime(now);
 					c.set(Calendar.HOUR_OF_DAY, 0);

@@ -15,11 +15,6 @@
 *******************************************************************************/
 package com.acmeair.web;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.FormParam;
@@ -28,12 +23,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
+import com.acmeair.service.AuthService;
 import com.acmeair.service.CustomerService;
 import com.acmeair.service.ServiceLocator;
 
@@ -42,10 +38,8 @@ import com.acmeair.service.ServiceLocator;
 public class LoginREST {
 	
 	public static String SESSIONID_COOKIE_NAME = "sessionid";
-	
-	static final String authServiceLocation = System.getenv("AUTH_SERVICE");
-	static final String authContextRoot = "/acmeair-as/rest/api";
-	
+			
+	private AuthService authService = ServiceLocator.instance().getService(AuthService.class);
 	private CustomerService customerService = ServiceLocator.instance().getService(CustomerService.class);
 	
 	
@@ -54,7 +48,7 @@ public class LoginREST {
 	@Produces("text/plain")
 	public Response login(@FormParam("login") String login, @FormParam("password") String password) {
 		try {
-			// Forward to customer service??
+			// TODO: forward to customer service??
 			boolean validCustomer = customerService.validateCustomer(login, password);
 			
 			if (!validCustomer) {
@@ -63,37 +57,10 @@ public class LoginREST {
 			
 			NewCookie sessCookie = null;
 			
-			if (authServiceLocation != null && authServiceLocation != "") {
-				
-				// Call Auth-Service
-				HttpURLConnection urlc = (HttpURLConnection) new URL("http://"+ authServiceLocation + authContextRoot + "/authtoken/byuserid/" + login).openConnection();
-				urlc.setRequestMethod("POST");
-				urlc.setRequestProperty("Content-Type", "application/json");
-				
-				
-				// Get result
-				BufferedReader br = new BufferedReader(new InputStreamReader(urlc.getInputStream()));
-				StringBuffer sb = new StringBuffer();
-				String l = null;
-				while ((l=br.readLine())!=null) {
-					sb=sb.append(l);
-				}
-				br.close();		
-							
-				if (urlc.getResponseCode() == 200) {
-					
-					JSONObject jsonObject = (JSONObject)JSONValue.parse(sb.toString());
-					String sessionId=(String) jsonObject.get("_id");
-					
-					sessCookie = new NewCookie(SESSIONID_COOKIE_NAME, sessionId);
-				}
-
-			} else {
-				JSONObject sessionJson = customerService.createSession(login);
-				sessCookie = new NewCookie(SESSIONID_COOKIE_NAME, (String) sessionJson.get("_id"));
-			}		
 			
-			
+			JSONObject sessionJson = authService.createSession(login);
+			sessCookie = new NewCookie(SESSIONID_COOKIE_NAME, (String) sessionJson.get("_id"));
+						
 			// TODO:  Need to fix the security issues here - they are pretty gross likely
 			
 			// TODO: The mobile client app requires JSON in the response. 
@@ -116,28 +83,12 @@ public class LoginREST {
 	public Response logout(@QueryParam("login") String login, @CookieParam("sessionid") String sessionid) {
 		try {
 			// TODO: seems to be a bug with chrome on the sessionid. This has always existed...
+			// Looks like a difference between how the node.js app and java app handle cookies.
 			if (sessionid.equals(""))
 			{
 				System.out.println("sessionid is empty");
-			}	else if (authServiceLocation != null && authServiceLocation != "") {
-							
-				// Call Auth-Service
-				HttpURLConnection urlc = (HttpURLConnection) new URL("http://"+ authServiceLocation + authContextRoot + "/authtoken/" + sessionid).openConnection();
-				urlc.setRequestMethod("DELETE");
-				urlc.setRequestProperty("Content-Type", "application/json");
-								
-				// Get Result - should be empty
-				BufferedReader br = new BufferedReader(new InputStreamReader(urlc.getInputStream()));
-				StringBuffer sb = new StringBuffer();
-				String l = null;
-				while ((l=br.readLine())!=null) {
-					sb=sb.append(l);
-				}
-				br.close();
-								
-				
 			} else {
-				customerService.invalidateSession(sessionid);
+				authService.invalidateSession(sessionid);
 			}
 			// The following call will trigger query against all partitions, disable for now
 			//			customerService.invalidateAllUserSessions(login);

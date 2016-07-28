@@ -23,6 +23,9 @@ public class CustomerLoader {
 
 	private CustomerService customerService = ServiceLocator.instance().getService(CustomerService.class);
 
+	public void dropCustomers() {				
+			customerService.dropCustomers();
+	}
 	
 	public void loadCustomers(long numCustomers) {				
 		

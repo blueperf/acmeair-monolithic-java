@@ -1,0 +1,10 @@
+FROM registry.ng.bluemix.net/ibmliberty:javaee7
+COPY ./acmeair-cs/server.xml /config/
+
+RUN installUtility install --acceptLicense defaultServer
+
+EXPOSE 80
+ENV VCAP_APP_PORT=80
+ENV SERVICE_NAME=customer
+
+ADD ./acmeair-cs/build/libs/acmeair-cs-2.0.0-SNAPSHOT.war /config/apps/

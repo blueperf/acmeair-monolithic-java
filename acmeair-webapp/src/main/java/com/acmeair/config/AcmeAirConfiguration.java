@@ -14,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import com.acmeair.service.AuthService;
 import com.acmeair.service.BookingService;
 import com.acmeair.service.CustomerService;
 import com.acmeair.service.FlightService;
@@ -29,6 +30,7 @@ public class AcmeAirConfiguration {
 
 	private BookingService bs = ServiceLocator.instance().getService(BookingService.class);
 	private CustomerService customerService = ServiceLocator.instance().getService(CustomerService.class);
+	private AuthService authService = ServiceLocator.instance().getService(AuthService.class);
 	private FlightService flightService = ServiceLocator.instance().getService(FlightService.class);
 
 	
@@ -167,7 +169,7 @@ public class AcmeAirConfiguration {
 	@Produces("application/json")
 	public Response countCustomerSessions() {
 		try {
-			Long customerCount = customerService.countSessions();
+			Long customerCount = authService.countSessions();
 			
 			return Response.ok(customerCount).build();
 		}

@@ -1,0 +1,86 @@
+session_db1:
+  container_name: session_db1
+  image: mongo
+  net: ${NETWORK}
+  
+booking_db1:
+  container_name: booking_db1
+  image: mongo
+  net: ${NETWORK}
+  
+customer_db1:
+  container_name: customer_db1
+  image: mongo
+  net: ${NETWORK}
+  
+flight_db1:
+  container_name: flight_db1
+  image: mongo
+  net: ${NETWORK}
+
+nginx1:
+  container_name: nginx1
+  net: ${NETWORK}
+  restart: always
+  build: ./nginx/
+  ports:
+    - "80:80"
+  volumes:
+    - /www/public
+  volumes_from:
+    - main_service_liberty1
+    - auth_service_liberty1
+    - booking_service_liberty1
+    - customer_service_liberty1
+    - flight_service_liberty1
+    - support_service_liberty1
+
+main_service_liberty1:
+  container_name: main_service_liberty1
+  net: ${NETWORK}
+  build: ./acmeair-mainapp/
+  environment:
+    - LICENSE=accept
+
+auth_service_liberty1:
+  container_name: auth_service_liberty1
+  net: ${NETWORK}
+  build: ./acmeair-as/
+  environment:
+    - LICENSE=accept
+  volumes_from:
+    - session_db1
+
+booking_service_liberty1:
+  container_name: booking_service_liberty1
+  net: ${NETWORK}
+  build: ./acmeair-bs/
+  environment:
+    - LICENSE=accept
+  volumes_from:
+    - booking_db1
+
+customer_service_liberty1:
+  container_name: customer_service_liberty1
+  net: ${NETWORK}
+  build: ./acmeair-cs/
+  environment:
+    - LICENSE=accept
+  volumes_from:
+    - customer_db1
+
+flight_service_liberty1:
+  container_name: flight_service_liberty1
+  net: ${NETWORK}
+  build: ./acmeair-fs/
+  environment:
+    - LICENSE=accept
+  volumes_from:
+    - flight_db1
+
+support_service_liberty1:
+  container_name: support_service_liberty1
+  build: ./acmeair-ss
+  net: ${NETWORK}
+  environment:
+    - LICENSE=accept

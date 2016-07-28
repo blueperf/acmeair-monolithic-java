@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="new server">
+    <!-- Enable features -->
+    <featureManager>
+         <feature>jaxrs-2.0</feature>
+         <feature>managedBeans-1.0</feature>
+         <feature>cdi-1.2</feature>
+    </featureManager>
+
+    <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="80"
+                  httpsPort="9493" >
+        <tcpOptions soReuseAddr="true"/> 
+		<httpOptions maxKeepAliveRequests="-1"/>
+	</httpEndpoint>
+
+    <application name="acmeair-bs" context-root="acmeair-bs" type="war" location="acmeair-bs-2.0.0-SNAPSHOT.war"></application>
+    <webContainer deferServletLoad="false"/>
+    <jndiEntry jndiName="com/acmeair/repository/type" value="mongo"/>
+    <!--logging traceSpecification="*=audit:com.acmeair.*=finest"/-->
+    
+    <executor name="LargeThreadPool" id="default" coreThreads="10" maxThreads="10" />
+</server>

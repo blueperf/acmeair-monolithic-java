@@ -115,4 +115,9 @@ public class BookingServiceImpl implements BookingService, MongoConstants {
 	public Long count() {
 		return booking.count();
 	}	
+	
+	@Override
+	public void dropBookings() {
+		booking.deleteMany(new Document());	
+	}
 }

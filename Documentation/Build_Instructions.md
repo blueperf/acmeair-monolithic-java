@@ -24,7 +24,7 @@ If the sample git repository hasn't been cloned yet, use git tools integrated in
 4. In the *Project root directory* folder textbox, Paste in the repository directory.
 5. Click *Next* twice
 6. Seven projects should be listed in the *Gradle project structure* click *Finish*
-7. This will create 5 projects in Eclipse: acmeair, acmeair-as, acmeair-cs, acmeair-fbs, acmeair-services, acmeair-services-mongo, acmeair-webapp
+7. This will create 7 projects in Eclipse: acmeair, acmeair-as, acmeair-bs, acmeair-cs, acmeair-fs, acmeair-mainapp, acmeair-services, acmeair-services-mongo, acmeair-webapp
 8. Go to the *Gradle Tasks* view in Eclipse and navigate to the *acmeair* project
 9. Double click on the *eclipse* task to generate all the Eclipse files
 10. In the *Enterprise Explorer* view in Eclipse right click on the seven projects mentioned in step 7 and click refresh
@@ -39,8 +39,10 @@ If the sample git repository hasn't been cloned yet, use git tools integrated in
 
 This will download prerequisite jars and build four wars:  
 * acmeair-as/build/libs/acmeair-as-2.0.0-SNAPSHOT.war  
+* acmeair-bs/build/libs/acmeair-bs-2.0.0-SNAPSHOT.war
 * acmeair-cs/build/libs/acmeair-cs-2.0.0-SNAPSHOT.war  
-* acmeair-fbs/build/libs/acmeair-fbs-2.0.0-SNAPSHOT.war  
+* acmeair-fs/build/libs/acmeair-fs-2.0.0-SNAPSHOT.war  
+* acmeair-mainapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war
 * acmeair-webapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war
 
 
@@ -85,6 +87,8 @@ $ gradle build
 
 This will download prerequisite jars and build four wars:  
 * acmeair-as/build/libs/acmeair-as-2.0.0-SNAPSHOT.war  
+* acmeair-bs/build/libs/acmeair-bs-2.0.0-SNAPSHOT.war
 * acmeair-cs/build/libs/acmeair-cs-2.0.0-SNAPSHOT.war  
-* acmeair-fbs/build/libs/acmeair-fbs-2.0.0-SNAPSHOT.war  
-* acmeair-webapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war  
+* acmeair-fs/build/libs/acmeair-fs-2.0.0-SNAPSHOT.war  
+* acmeair-mainapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war
+* acmeair-webapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war 

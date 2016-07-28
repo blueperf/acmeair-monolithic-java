@@ -19,7 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -64,6 +66,7 @@ public class CustomerREST {
 			if (!validate(customerid)) {
 				return Response.status(Response.Status.FORBIDDEN).build();
 			}
+			
 			return Response.ok(customerService.getCustomerByUsername(customerid)).build();
 		}
 		catch (Exception e) {
@@ -71,11 +74,11 @@ public class CustomerREST {
 			return null;
 		}
 	}
-
+	
 	@POST
 	@Path("/byid/{custid}")
 	@Produces("text/plain")
-	public /* Customer */ Response putCustomer(@CookieParam("sessionid") String sessionid, CustomerInfo customer) {
+	public Response putCustomer(@CookieParam("sessionid") String sessionid, CustomerInfo customer) {
 		String username = customer.getUsername();
 		if (!validate(username)) {
 			return Response.status(Response.Status.FORBIDDEN).build();
@@ -96,6 +99,28 @@ public class CustomerREST {
 		//Retrieve the latest results
 		customerFromDB = customerService.getCustomerByUsernameAndPassword(username, customer.getPassword());
 		return Response.ok(customerFromDB).build();
+	}
+	
+	@POST
+	@Path("/validateid")
+	@Consumes({"application/x-www-form-urlencoded"})
+	@Produces("text/plain")
+	public Response validateCustomer(@FormParam("login") String login, @FormParam("password") String password) {
+		if(logger.isLoggable(Level.FINE)){
+			logger.fine("validateid : login " + login + " password " + password);
+		}
+		
+		String validCustomer = null;
+				
+		if (customerService.validateCustomer(login, password)) {
+			validCustomer = "true";
+		} else {
+			validCustomer = "false";
+		}
+				
+		String s = "{\"validCustomer\":\"" + validCustomer + "\"}";
+				
+		return Response.ok(s).build();
 	}
 	
 

@@ -27,6 +27,7 @@ Linux:
 export WLP_SERVERDIR=~/work/java/wlp
 ```
 
+# Monolithic Mode
 
 ## Create the WebSphere Liberty server and then deploy the application
 Windows:
@@ -68,8 +69,8 @@ cp $ACMEAIR_SRCDIR/acmeair-webapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war $
     <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
     <httpEndpoint id="defaultHttpEndpoint"
                   host="*"
-                  httpPort="9090"
-                  httpsPort="9493" />
+                  httpPort="9085"
+                  httpsPort="9485" />
 
     <application id="acmeair-webapp" name="acmeair-webapp" type="war" location="acmeair-webapp-2.0.0-SNAPSHOT.war">
       
@@ -80,38 +81,73 @@ cp $ACMEAIR_SRCDIR/acmeair-webapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war $
 </server>
 ```
 
-## MicroService Mode (optional): Create the three additional WebSphere Liberty servers
+# MicroService Mode: Create the Five WebSphere Liberty servers
 
 Windows:
 ```text
 cd %WLP_SERVERDIR%
+bin\server.bat create acemair-mainapp
 bin\server.bat create acemair-as
+bin\server.bat create acemair-bs
 bin\server.bat create acemair-cs
-bin\server.bat create acemair-fbs
+bin\server.bat create acemair-fs
 ```
 
 Linux:
 ```text
 cd $WLP_SERVERDIR
+in/server create acmeair-mainapp
 bin/server create acmeair-as
+bin/server create acmeair-bs
 bin/server create acmeair-cs
-bin/server create acmeair-fbs
+bin/server create acmeair-fs
 ```
 
 * Copy the web applications you previously built  
 
 Windows:
 ```text
+copy %ACMEAIR_SRCDIR%\acmeair-mainapp\build\libs\acmeair-mainapp-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-mainapp\apps\
 copy %ACMEAIR_SRCDIR%\acmeair-as\build\libs\acmeair-as-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-as\apps\
-copy %ACMEAIR_SRCDIR%\acmeair-cs\build\libs\acmeair-as-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-cs\apps\.
-copy %ACMEAIR_SRCDIR%\acmeair-fbs\build\libs\acmeair-as-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-fbs\apps\.
+copy %ACMEAIR_SRCDIR%\acmeair-bs\build\libs\acmeair-bs-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-bs\apps\
+copy %ACMEAIR_SRCDIR%\acmeair-cs\build\libs\acmeair-cs-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-cs\apps\.
+copy %ACMEAIR_SRCDIR%\acmeair-fs\build\libs\acmeair-fs-2.0.0-SNAPSHOT.war %WLP_SERVERDIR%\usr\servers\acmeair-fs\apps\.
 ```
 
 Linux:
 ```text
+cp $ACMEAIR_SRCDIR/acmeair-mainapp/build/libs/acmeair-mainapp-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-mainapp/apps/
 cp $ACMEAIR_SRCDIR/acmeair-as/build/libs/acmeair-as-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-as/apps/
-cp $ACMEAIR_SRCDIR/acmeair-cs/build/libs/acmeair-as-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-cs/apps/
-cp $ACMEAIR_SRCDIR/acmeair-fbs/build/libs/acmeair-as-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-fbs/apps/
+cp $ACMEAIR_SRCDIR/acmeair-bs/build/libs/acmeair-bs-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-bs/apps/
+cp $ACMEAIR_SRCDIR/acmeair-cs/build/libs/acmeair-cs-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-cs/apps/
+cp $ACMEAIR_SRCDIR/acmeair-fs/build/libs/acmeair-fs-2.0.0-SNAPSHOT.war $WLP_SERVERDIR/usr/servers/acmeair-fs/apps/
+```
+
+* Change $WLP_SERVERDIR/acmeair-mainapp/server.xml to:  
+```bash
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="new server">
+
+    <!-- Enable features -->
+    <featureManager>
+         <feature>jaxrs-2.0</feature>
+         <feature>managedBeans-1.0</feature>
+         <feature>cdi-1.2</feature>
+    </featureManager>
+
+    <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="9080"
+                  httpsPort="9480" />
+
+    <application id="acmeair" name="acmeair" type="war" location="acmeair-mainapp-2.0.0-SNAPSHOT.war">
+      
+    </application>
+
+    <jndiEntry jndiName="com/acmeair/repository/type" value="mongo"/>
+
+</server>
 ```
 
 * Change $WLP_SERVERDIR/acmeair-as/server.xml to:  
@@ -129,8 +165,8 @@ cp $ACMEAIR_SRCDIR/acmeair-fbs/build/libs/acmeair-as-2.0.0-SNAPSHOT.war $WLP_SER
     <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
     <httpEndpoint id="defaultHttpEndpoint"
                   host="*"
-                  httpPort="9091"
-                  httpsPort="9493" />
+                  httpPort="9083"
+                  httpsPort="9483" />
 
     <application id="acmeair-as" name="acmeair-as" type="war" location="acmeair-as-2.0.0-SNAPSHOT.war">
       
@@ -156,8 +192,8 @@ cp $ACMEAIR_SRCDIR/acmeair-fbs/build/libs/acmeair-as-2.0.0-SNAPSHOT.war $WLP_SER
     <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
     <httpEndpoint id="defaultHttpEndpoint"
                   host="*"
-                  httpPort="9092"
-                  httpsPort="9493" />
+                  httpPort="9081"
+                  httpsPort="9481" />
 
     <application id="acmeair-cs" name="acmeair-cs" type="war" location="acmeair-cs-2.0.0-SNAPSHOT.war">
       
@@ -168,7 +204,7 @@ cp $ACMEAIR_SRCDIR/acmeair-fbs/build/libs/acmeair-as-2.0.0-SNAPSHOT.war $WLP_SER
 </server>
 ```
 
-* Change $WLP_SERVERDIR/acmeair-fbs/server.xml to:  
+* Change $WLP_SERVERDIR/acmeair-fs/server.xml to:  
 ```bash
 <?xml version="1.0" encoding="UTF-8"?>
 <server description="new server">
@@ -183,10 +219,37 @@ cp $ACMEAIR_SRCDIR/acmeair-fbs/build/libs/acmeair-as-2.0.0-SNAPSHOT.war $WLP_SER
     <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
     <httpEndpoint id="defaultHttpEndpoint"
                   host="*"
-                  httpPort="9093"
-                  httpsPort="9493" />
+                  httpPort="9082"
+                  httpsPort="9482" />
 
-    <application id="acmeair-fbs" name="acmeair-fbs" type="war" location="acmeair-fbs-2.0.0-SNAPSHOT.war">
+    <application id="acmeair-fs" name="acmeair-fs" type="war" location="acmeair-fs-2.0.0-SNAPSHOT.war">
+      
+    </application>
+
+    <jndiEntry jndiName="com/acmeair/repository/type" value="mongo"/>
+
+</server>
+```
+
+* Change $WLP_SERVERDIR/acmeair-bs/server.xml to:  
+```bash
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="new server">
+
+    <!-- Enable features -->
+    <featureManager>
+         <feature>jaxrs-2.0</feature>
+         <feature>managedBeans-1.0</feature>
+         <feature>cdi-1.2</feature>
+    </featureManager>
+
+    <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="9084"
+                  httpsPort="9484" />
+
+    <application id="acmeair-bs" name="acmeair-bs" type="war" location="acmeair-bs-2.0.0-SNAPSHOT.war">
       
     </application>
 
@@ -218,31 +281,31 @@ bin/server start acmeair
 Windows:  
 ```text
 cd %WLP_SERVERDIR%
-set AUTH_SERVICE=localhost:9091
-set CUSTOMER_SERVICE=localhost:9092
-set FLIGHTBOOKING_SERVICE=localhost:9093
-bin\server.bat start acmeair
+
+bin\server.bat start acmeair-mainapp
 bin\server.bat start acmeair-as
+bin\server.bat start acmeair-bs
 bin\server.bat start acmeair-cs
-bin\server.bat start acmeair-fbs
+bin\server.bat start acmeair-fs
 ```
 
 Linux:
 ```text
 cd $WLP_SERVERDIR
-export AUTH_SERVICE=localhost:9091
-sexport CUSTOMER_SERVICE=localhost:9092
-export FLIGHTBOOKING_SERVICE=localhost:9093
-bin/server start acmeair
+bin/server start acmeair-mainapp
 bin/server start acmeair-as
+bin/server start acmeair-bs
 bin/server start acmeair-cs
-bin/server start acmeair-fbs
+bin/server start acmeair-fs
 ```
+
+## Install nginx
+-Start nginx with the nginx.conf provided
 
 ## Look at the application
 * Load the following url:
 ```text
-http://localhost:9090/acmeair-webapp
+http://localhost/acmeair
 ```
 
 
@@ -250,7 +313,8 @@ http://localhost:9090/acmeair-webapp
 
 Click on the "configure the Acme Air environment." link at the bottom of the page, or alternatively go to 
 ```text
-http://localhost:9090/acmeair-webapp/loader.html
+http://localhost:9085/acmeair-webapp/loader.html (monolithic)
+http://localhost/acmeair/loader.html (micro-services)
 ```
 
 You can change the value for how many customers you wish to have loaded.  The default of 200 customer to load will be displayed. 
@@ -260,39 +324,48 @@ You can change the value for how many customers you wish to have loaded.  The de
 You will now be able to log in, click on the "Acme Air Home" link at either the top or bottom of the page to return to the welcome page. 
 
 * Login (use the provided credentials), search for flights (suggest today between Paris and New York), book the flights, use the checkin link to cancel the bookings one at a time, view your account profile
- 
-(Optional) Load the sample data from command line -  Use curl to load the data as follows:
-* curl http://**HOSTNAME:PORT/APPPATH**/rest/info/loader/load?numCustomers=200
 
-## Remote Mongo DB Configuration for Runtime
 
-To specify different values, set the following environment variable:
-export ACMEAIR_PROPERTIES=/opt/BLUEMIX/acmeair/mongodb.properties OR set ACMEAIR_PROPERTIES=/opt/BLUEMIX/acmeair/mongodb.properties
+## (Optional) Acmeair Configuration Properties
 
-Within the properties file, you can configure the following:
+By default, Acmeair is configured with following variables
+* Flight related data caching - Disabled
+* DB related variables
 
-Name | Default | Meaning
---- |:---:| ---
-userFlightDataRelatedCaching | false | Flight Data to be cached (for workaround for the table join)
-hostname | localhost | MongoDB hostname
-port | 27017 | MongoDB port number
-dbname | acmeair | MongoDB database name
-username|none | comment out if there is no security in Mongo DB 
-password|none | comment out if there is no security in Mongo DB 
-connectionsPerHost| 100 | comment out to use default
-minConnectionsPerHost| 0 | comment out to use default 
-maxWaitTime| 120000 |  comment out to use default
-connectTimeout| 10000 |  comment out to use default
-socketTimeout| 0 |  comment out to use default
-socketKeepAlive| false |  comment out to use default
-sslEnabled| false | comment out to use default
-threadsAllowedToBlockForConnectionMultiplier| 5 | comment out to use default
- 
-Example:<br/>
-userFlightDataRelatedCaching=true<br/>
-hostname=omni.canlab.ibm.com<br/>
-port=27017<br/>
-dbname=acmeair<br/>
 
+| Variable Name       | Value           |
+| ------------- |:-------------:|
+| hostname | localhost |
+| port | 27017 |
+| dbname | acmeair |
+| username | None |
+| password | None |
+| connectionsPerHost | Default |
+| minConnectionsPerHost | Default |
+| maxWaitTime | Default |
+| connectTimeout | Default |
+| socketTimeout | Default |
+| socketKeepAlive | Default |
+| sslEnabled | Default |
+| threadsAllowedToBlockForConnectionMultiplier | Default |
+
+To change these variables, create ACMEAIR_PROPERTIES variables to point to a properties file (e.g. ACMEAIR_PROPERTIES=/opt/BLUEMIX/acmeair/acmeair.properties)
+
+Sample properties file content:
+
+```userFlightDataRelatedCaching=true
+hostname=your.mongo.db.hostname
+port=27017
+dbname=acmeair
+username=dbuser
+password=1234
+#connectionsPerHost=
+#minConnectionsPerHost=
+#maxWaitTime=
+#connectTimeout=
+#socketTimeout=
+#socketKeepAlive=
+#sslEnabled=
+#threadsAllowedToBlockForConnectionMultiplier=```
 
 

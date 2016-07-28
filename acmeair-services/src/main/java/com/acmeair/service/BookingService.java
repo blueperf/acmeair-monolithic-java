@@ -32,4 +32,6 @@ public interface BookingService {
 	void cancelBooking(String user, String id);
 	
 	Long count();
+
+	void dropBookings();
 }

@@ -4,12 +4,10 @@ import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.combine;
 import static com.mongodb.client.model.Updates.set;
 
-import java.util.Date;
-
 import javax.annotation.PostConstruct;
 
 import org.bson.Document;
-import org.json.simple.JSONObject;
+
 
 import com.acmeair.mongo.ConnectionManager;
 import com.acmeair.mongo.MongoConstants;
@@ -18,7 +16,7 @@ import com.acmeair.service.DataService;
 import com.acmeair.web.dto.CustomerInfo;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-//import com.mongodb.async.client.*;
+
 
 
 @DataService(name=MongoConstants.KEY,description=MongoConstants.KEY_DESCRIPTION)
@@ -27,25 +25,18 @@ public class CustomerServiceImpl extends CustomerService implements MongoConstan
 //	private final static Logger logger = Logger.getLogger(CustomerService.class.getName()); 
 	
 	private MongoCollection<Document> customer;
-	private MongoCollection<Document> customerSession;
 	
 	@PostConstruct
 	public void initialization() {	
 		MongoDatabase database = ConnectionManager.getConnectionManager().getDB();
 		customer = database.getCollection("customer");
-		customerSession = database.getCollection("customerSession");
 	}
 	
 	@Override
 	public Long count() {
 		return customer.count();
 	}
-	
-	@Override
-	public Long countSessions() {
-		return customerSession.count();
-	}
-	
+		
 	@Override
 	public void createCustomer(String username, String password,
 			String status, int total_miles, int miles_ytd,
@@ -114,34 +105,11 @@ public class CustomerServiceImpl extends CustomerService implements MongoConstan
 		}
 		return customerDoc.toJson();
 	}
-	
-	@Override
-	protected String getSession(String sessionid){
-		return customerSession.find(eq("_id", sessionid)).first().toJson();
-	}
-	
-	@Override
-	protected void removeSession(String sessionJson){
-		new Document();
-		customerSession.deleteMany(Document.parse(sessionJson));
-	}
-	
-	@Override
-	protected  String createSession(String sessionId, String customerId, Date creation, Date expiration) {
-		Document sessionDoc = new Document("_id", sessionId)
-        .append("customerid", customerId)
-        .append("lastAccessedTime", creation)
-        .append("timeoutTime", expiration);
-		
-		customerSession.insertOne(sessionDoc);
-		
-		return sessionDoc.toJson();
-		
-	}
 
 	@Override
-	public void invalidateSession(String sessionid) {		
-		customerSession.deleteMany(eq("_id", sessionid));
+	public void dropCustomers() {
+		customer.deleteMany(new Document());
+		
 	}
-
+	
 }

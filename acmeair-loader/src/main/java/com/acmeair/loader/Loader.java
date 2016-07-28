@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013-2015 IBM Corp.
+* Copyright (c) 2013-2016 IBM Corp.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -47,6 +47,33 @@ public class Loader {
 		return message;	
 	}
 	
+	public String loadCustomerDB(long numCustomers) {		
+		String message = "";
+		
+		System.setProperty("loader.numCustomers", Long.toString(numCustomers));
+		message = executeCustomerDB(numCustomers);
+		
+		return message;	
+	}
+	
+	public String loadFlightDB() {		
+		String message = "";
+			message = executeFlightDB();
+			return message;	
+	}
+	public String clearSessionDB() {		
+		String message = "";
+				
+		message = executeSessionDB();
+		
+		return message;	
+	}
+	
+	public String clearBookingDB() {		
+		String message = "";
+			message = executeBookingDB();
+			return message;	
+	}
 	
 	
 	public static void main(String args[]) throws Exception {
@@ -69,11 +96,19 @@ public class Loader {
 	private String execute(long numCustomers) {
 		FlightLoader flightLoader = new FlightLoader();
 		CustomerLoader customerLoader = new CustomerLoader();
+		SessionLoader sessionLoader = new SessionLoader();
+		BookingLoader bookingLoader = new BookingLoader();
 
     	double length = 0;
 		try {
 			long start = System.currentTimeMillis();
 			logger.info("Start loading flights");
+			customerLoader.dropCustomers();
+			flightLoader.dropFlights();
+			sessionLoader.dropSessions();
+			bookingLoader.dropBookings();
+			
+			
 			flightLoader.loadFlights();
 			logger.info("Start loading " +  numCustomers + " customers");
 			customerLoader.loadCustomers(numCustomers);
@@ -86,6 +121,82 @@ public class Loader {
 		}		
 		return "Loaded flights and "  +  numCustomers + " customers in " + length + " seconds";
 	}
+	
+	private String executeCustomerDB(long numCustomers) {
+		CustomerLoader customerLoader = new CustomerLoader();
+
+    	double length = 0;
+		try {
+			long start = System.currentTimeMillis();		
+			logger.info("Start loading " +  numCustomers + " customers");
+			customerLoader.dropCustomers();
+			customerLoader.loadCustomers(numCustomers);
+			long stop = System.currentTimeMillis();
+			logger.info("Finished loading in " + (stop - start)/1000.0 + " seconds");
+			length = (stop - start)/1000.0;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return "Loaded "  +  numCustomers + " customers in " + length + " seconds";
+	}
+	
+	private String executeFlightDB() {
+		FlightLoader flightLoader = new FlightLoader();
+		
+
+    	double length = 0;
+		try {
+			long start = System.currentTimeMillis();
+			logger.info("Start loading flights");
+			flightLoader.dropFlights();		
+			flightLoader.loadFlights();			
+			long stop = System.currentTimeMillis();
+			logger.info("Finished loading in " + (stop - start)/1000.0 + " seconds");
+			length = (stop - start)/1000.0;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return "Loaded flights in " + length + " seconds";
+	}
+	
+	private String executeSessionDB() {
+		SessionLoader sessionLoader = new SessionLoader();
+
+    	double length = 0;
+		try {
+			long start = System.currentTimeMillis();		
+			logger.info("Start clearing session");
+			sessionLoader.dropSessions();
+			long stop = System.currentTimeMillis();
+			logger.info("Finished clearing in " + (stop - start)/1000.0 + " seconds");
+			length = (stop - start)/1000.0;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return "Cleared sessions in " + length + " seconds";
+	}
+	
+	private String executeBookingDB() {
+		BookingLoader bookingLoader = new BookingLoader();
+
+    	double length = 0;
+		try {
+			long start = System.currentTimeMillis();		
+			logger.info("Start clearing session");
+			bookingLoader.dropBookings();
+			long stop = System.currentTimeMillis();
+			logger.info("Finished clearing in " + (stop - start)/1000.0 + " seconds");
+			length = (stop - start)/1000.0;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return "Cleared sessions in " + length + " seconds";
+	}
+	
 	
 	
 	private void lookupDefaults (){
