@@ -45,6 +45,7 @@ public class LoginREST {
 	public static String SESSIONID_COOKIE_NAME = "sessionid";
 	private AuthService authService = ServiceLocator.instance().getService(AuthService.class);
 	
+	
 	private static String customerServiceLocation = ((System.getenv("CUSTOMER_SERVICE") == null) ? Util.getServiceProxy() + "/customer/acmeair-cs" : System.getenv("CUSTOMER_SERVICE"));
 	//private static String customerServiceLocation = System.getenv("CUSTOMER_SERVICE");
 	
@@ -149,12 +150,17 @@ public class LoginREST {
 		c.close();			        
 		*/
 		try {
-		
+			
+			// Set maxConnections - this seems to help with keepalives/running out of sockets with a high load.
+			if (System.getProperty("http.maxConnections")==null) {
+				System.setProperty("http.maxConnections", "50");
+			}
+							
 			String url = "http://"+ customerServiceLocation + VALIDATE_PATH;
 			URL obj = new URL(url);
 			HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
 
-			//	add request header
+			// add request header
 			conn.setRequestMethod("POST");
 			conn.setDoInput(true);
 			conn.setDoOutput(true);
@@ -174,6 +180,7 @@ public class LoginREST {
 				response.append(inputLine);
 			}
 			in.close();
+			conn.disconnect(); // Is this necessary?
 
 			//	print result
 			String output=response.toString();

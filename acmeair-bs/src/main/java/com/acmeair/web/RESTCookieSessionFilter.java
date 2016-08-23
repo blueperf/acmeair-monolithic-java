@@ -111,7 +111,11 @@ public class RESTCookieSessionFilter implements Filter {
 	    	*/
 			
 			// Instead, do simple http call
-			// However, running out of sockets on heavy load with this...
+			
+			// Set maxConnections - this seems to help with keepalives/running out of sockets with a high load.
+			if (System.getProperty("http.maxConnections")==null) {
+				System.setProperty("http.maxConnections", "50");
+			}
 			String url = "http://" + authServiceLocation  + AUTHCHECK_PATH + sessionId;
 
 			URL obj = new URL(url);
@@ -126,6 +130,8 @@ public class RESTCookieSessionFilter implements Filter {
 				responseString.append(line);
 			}
 			in.close();
+			conn.disconnect();  // Is this necessary?
+			
 			String output = responseString.toString();
 				    					
 			String loginUser=null;
