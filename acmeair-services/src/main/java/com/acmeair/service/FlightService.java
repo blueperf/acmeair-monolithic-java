@@ -41,9 +41,14 @@ public abstract class FlightService {
 					properties.load(new FileInputStream(acmeairProps));
 					useFlightDataRelatedCaching = Boolean.parseBoolean(properties.getProperty("userFlightDataRelatedCaching"));
 					System.out.println("useFlightDataRelatedCaching : " + useFlightDataRelatedCaching);
-				}else {
-					System.out.println("ACMEAIR_PROPERTIES environment variable is not set. Disabling Caching. To ensable caching, use Environment variable ACMEAIR_PROPERTIES");
-					useFlightDataRelatedCaching = false;
+				} else if (System.getenv("USE_FLIGHT_DATA_RELATED_CACHING") != null ) {
+					System.out.println("Found env variable USE_FLIGHT_DATA_RELATED_CACHING");
+					useFlightDataRelatedCaching = Boolean.parseBoolean(System.getenv("USE_FLIGHT_DATA_RELATED_CACHING"));
+					System.out.println("useFlightDataRelatedCaching : " + useFlightDataRelatedCaching);
+				}
+				else {
+					System.out.println("Neither ACMEAIR_PROPERTIES or USE_FLIGHT_DATA_RELATED_CACHING environment variables are set. Enabling Caching. To disable caching, use Environment variable ACMEAIR_PROPERTIES or USE_FLIGHT_DATA_RELATED_CACHING");
+					useFlightDataRelatedCaching = true;
 				}
 			} catch (Exception e) {
 				System.out.println("ACMEAIR_PROPERTIES error. Check for below log");

@@ -15,6 +15,12 @@
 *******************************************************************************/
 package com.acmeair.web;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.FormParam;
@@ -24,14 +30,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
-//import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONObject;
@@ -133,12 +131,11 @@ public class LoginREST {
 	
 	private boolean validateCustomer(String login, String password) {
 		
-		//TODO: Place-Holder, Replace with Service Discovery/Registry
 		if (customerServiceLocation == null || customerServiceLocation == "") {
 			customerServiceLocation = "localhost/acmeair";
 		}
 				
-		Form form = new Form();
+		/*Form form = new Form();
 		form.param("login", login);
 		form.param("password", password);
 		
@@ -150,12 +147,45 @@ public class LoginREST {
 		Response res = builder.post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE), Response.class);
 		String output = res.readEntity(String.class);       		
 		c.close();			        
+		*/
+		try {
 		
-		JSONObject jsonObject = (JSONObject)JSONValue.parse(output);
-		String validCustomer =(String) jsonObject.get("validCustomer");
+			String url = "http://"+ customerServiceLocation + VALIDATE_PATH;
+			URL obj = new URL(url);
+			HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
+
+			//	add request header
+			conn.setRequestMethod("POST");
+			conn.setDoInput(true);
+			conn.setDoOutput(true);
+			String urlParameters="login="+login+"&password="+password;
+
+			// 	Send post request
+			DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+			wr.writeBytes(urlParameters);
+			wr.flush();
+			wr.close();
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			//	print result
+			String output=response.toString();
+			
+			JSONObject jsonObject = (JSONObject)JSONValue.parse(output);
+			String validCustomer =(String) jsonObject.get("validCustomer");
 		
-		if(validCustomer.equals("true")) {
-			return true;
+			if(validCustomer.equals("true")) {
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return false;

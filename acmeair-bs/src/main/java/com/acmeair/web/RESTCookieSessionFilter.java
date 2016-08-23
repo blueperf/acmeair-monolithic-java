@@ -15,7 +15,11 @@
 *******************************************************************************/
 package com.acmeair.web;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
@@ -28,11 +32,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -93,12 +92,12 @@ public class RESTCookieSessionFilter implements Filter {
 				return;
 			}
 			
-			//TODO: Place-Holder, Replace with Service Discovery/Registry
 			if (authServiceLocation == null || authServiceLocation == "") {
 				authServiceLocation = "localhost/acmeair";
 			}
 			
-			// TODO: Do I need to do this every time?
+			/* TODO: The jaxrs client code seems to a lot of classloading slowing everything way down - why?
+			 * For now, do simple http call below
 			ClientBuilder cb = ClientBuilder.newBuilder();
 			Client c = cb.build();		
 			
@@ -109,7 +108,26 @@ public class RESTCookieSessionFilter implements Filter {
 			Response res = builder.get();
 			String output = res.readEntity(String.class);       
 			c.close();			        
-	    					
+	    	*/
+			
+			// Instead, do simple http call
+			// However, running out of sockets on heavy load with this...
+			String url = "http://" + authServiceLocation  + AUTHCHECK_PATH + sessionId;
+
+			URL obj = new URL(url);
+			HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
+			conn.setRequestMethod("GET");
+			
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String line;
+			StringBuffer responseString = new StringBuffer();
+
+			while ((line = in.readLine()) != null) {
+				responseString.append(line);
+			}
+			in.close();
+			String output = responseString.toString();
+				    					
 			String loginUser=null;
 			if (output != null) {
 				
