@@ -37,12 +37,12 @@ If the sample git repository hasn't been cloned yet, use git tools integrated in
 2. Double click: build. 
 
 
-This will download prerequisite jars and build four wars:  
+This will download prerequisite jars and build the following wars:  
 * acmeair-as/build/libs/acmeair-as-2.0.0-SNAPSHOT.war  
 * acmeair-bs/build/libs/acmeair-bs-2.0.0-SNAPSHOT.war
 * acmeair-cs/build/libs/acmeair-cs-2.0.0-SNAPSHOT.war  
 * acmeair-fs/build/libs/acmeair-fs-2.0.0-SNAPSHOT.war  
-* acmeair-mainapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war
+* acmeair-mainapp/build/libs/acmeair-mainapp-2.0.0-SNAPSHOT.war
 * acmeair-webapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war
 
 
@@ -85,10 +85,10 @@ $ cd <ACMEAIR_GIT_PATH>
 $ gradle build
 ```
 
-This will download prerequisite jars and build four wars:  
+This will download prerequisite jars and build the following wars:  
 * acmeair-as/build/libs/acmeair-as-2.0.0-SNAPSHOT.war  
 * acmeair-bs/build/libs/acmeair-bs-2.0.0-SNAPSHOT.war
 * acmeair-cs/build/libs/acmeair-cs-2.0.0-SNAPSHOT.war  
 * acmeair-fs/build/libs/acmeair-fs-2.0.0-SNAPSHOT.war  
-* acmeair-mainapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war
+* acmeair-mainapp/build/libs/acmeair-mainapp-2.0.0-SNAPSHOT.war
 * acmeair-webapp/build/libs/acmeair-webapp-2.0.0-SNAPSHOT.war 
