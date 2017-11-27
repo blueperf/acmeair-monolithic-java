@@ -7,5 +7,17 @@ This version of acmeair supports:
 
 #Setup
 Use maven to build the project
- mvn clean package
-
+ - git clone https://github.com/blueperf/acmeair -b simple --single-branch
+ - cd acmeair
+ - mvn clean package
+ 
+#For CF
+ - mkdir apps
+ - cp target/acmeair-java-2.0.0-SNAPSHOT.war apps
+ - bx cf push acme-java-myname -p ../acmeair -m 512M
+  
+#For Container Services
+ - docker build -f ./Docker_CS -t registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME .
+ - docker push registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME
+ - Modify acmeairJAVA.yaml to add registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME as the image name
+ - kubectl create -f ./acmeairJAVA.yaml

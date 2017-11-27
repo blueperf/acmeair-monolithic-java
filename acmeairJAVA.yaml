@@ -1,0 +1,65 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: acme-java-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: acmeair
+        tier: monolithic
+        micro: java
+    spec:
+      containers:
+      - name: acmeair-java
+        image: IMAGE_NAME
+        imagePullPolicy: Always
+        env:
+        - name: MONGO_MANUAL
+          value: "true"
+        - name: MONGO_HOST
+          value: "MONGO_HOST_VALUE"
+        - name: MONGO_PORT
+          value: "MONGO_PORT_VALUE"
+        - name: MONGO_USER
+          value: "MONGO_USER_VALUE"
+        - name: MONGO_PASSWORD
+          value: "MONGO_PASSWORD_VALUE"
+        - name: MONGO_DBNAME
+          value: "MONGO_DBNAME_VALUE"
+        resources:
+          requests:
+            cpu: "700m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: acme-monolithic-service
+  labels:
+    app: acmeair
+    tier: monolithic
+    micro: java
+spec:
+  ports:
+  - protocol: TCP
+    port: 80
+    name: http
+  selector:
+    app: acmeair
+    tier: monolithic
+    micro: java
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: acme-java-autoscale
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    kind: Deployment
+    name: acme-java-deployment
+  targetCPUUtilizationPercentage: 80
+...
