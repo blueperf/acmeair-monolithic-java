@@ -1,1 +1,0 @@
-include  'acmeair-webapp',  'acmeair-mainapp', 'acmeair-services-mongo', 'acmeair-services', 'acmeair-cs' , 'acmeair-as' ,'acmeair-fs','acmeair-bs','acmeair-ss', 'acmeair-loader'
