@@ -64,19 +64,19 @@ public class ConnectionManager implements MongoConstants {
 		String mongoUser = System.getenv("MONGO_USER");
 
 		String mongoPassword = System.getenv("MONGO_PASSWORD");
+		try {
 
-		// If MONGO_MANUAL is set to true, it will set up the DB connection
-		// right away
-		if (isManual) {
-			if (!mongoUser.equals("")) {
-				MongoCredential credential = MongoCredential.createCredential(mongoUser, dbname,
-						mongoPassword.toCharArray());
-				mongoClient = new MongoClient(new ServerAddress(hostname, port),Arrays.asList(credential));
-			}else {
-				mongoClient = new MongoClient(hostname, port);
-			}
-		} else {
-			try {
+			// If MONGO_MANUAL is set to true, it will set up the DB connection
+			// right away
+			if (isManual) {
+				if (!mongoUser.equals("")) {
+					MongoCredential credential = MongoCredential.createCredential(mongoUser, dbname,
+							mongoPassword.toCharArray());
+					mongoClient = new MongoClient(new ServerAddress(hostname, port),Arrays.asList(credential));
+				}else {
+					mongoClient = new MongoClient(hostname, port);
+				}
+			} else {
 				// Check if VCAP_SERVICES exist, and if it does, look up the url
 				// from the credentials.
 				String vcapJSONString = System.getenv("VCAP_SERVICES");
@@ -103,13 +103,13 @@ public class ConnectionManager implements MongoConstants {
 				}else {
 					mongoClient = new MongoClient(hostname, port);
 				}
-			} catch (Exception e) {
-				logger.severe("Caught Exception : " + e.getMessage());
 			}
 			db = mongoClient.getDatabase(dbname);
 			logger.info("#### Mongo DB Server " + mongoClient.getAddress().getHost() + " ####");
 			logger.info("#### Mongo DB Port " + mongoClient.getAddress().getPort() + " ####");
 			logger.info("#### Mongo DB is created with DB name " + dbname + " ####");
+		} catch (Exception e) {
+			logger.severe("Caught Exception : " + e.getMessage());
 		}
 
 	}
