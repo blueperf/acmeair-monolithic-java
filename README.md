@@ -15,6 +15,28 @@ Use maven to build the project
  - mkdir apps
  - cp target/acmeair-java-2.0.0-SNAPSHOT.war apps
  - bx cf push acme-java-myname -p ../acmeair -m 512M
+ 
+ **Setup DB**
+ - First, create a Compost account, then create a Mongo DB (It is a paid service)
+ - get these information:
+   - "hostname
+   - "port"
+   - "db"
+   - "username"
+   - "password"
+ 
+- Create a string:
+   - "url": "mongodb://username:password@hostname:port/db"
+   - e.g. mongodb://acmeuser:password@myServer.dblayer.com:27017/acmeair
+ 
+- Use CF command to create DB:
+   - cf cups mongodbCompose -p "url"
+   - At the URL prompt, enter above URL that was created:
+   - url>mongodb://acmeuser:password@myServer.dblayer.com:27017/acmeair
+ 
+- On IBM Cloud Dasboard, bind the created mongodbCompose service to Acmeair
+   - restage/restart Acmeair application
+ 
   
 #For Container Services
  - docker build -f ./Dockerfile_CS -t registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME .
