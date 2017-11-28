@@ -42,4 +42,5 @@ Use maven to build the project
  - docker build -f ./Dockerfile_CS -t registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME .
  - docker push registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME
  - Modify acmeairJAVA.yaml to add registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME as the image name
+ - Modify acmeairJAVA.yaml to add DB connection information (Note: If there is no user setup for this DB, REMOVE MONGO_USER & MONGO_PASSWORD entries)
  - kubectl create -f ./acmeairJAVA.yaml
