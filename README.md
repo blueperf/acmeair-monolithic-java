@@ -5,13 +5,13 @@ This application shows an implementation of a fictitious airline called "Acme Ai
 This version of acmeair supports:
   - WebSphere Liberty Profile to Mongodb
 
-#Setup
+# Setup
 Use maven to build the project
  - git clone https://github.com/blueperf/acmeair -b simple --single-branch
  - cd acmeair
  - mvn clean package
  
-#For CF
+# For CF
  - mkdir apps
  - cp target/acmeair-java-2.0.0-SNAPSHOT.war apps
  - bx cf push acme-java-myname -p ../acmeair -m 512M
@@ -38,7 +38,7 @@ Use maven to build the project
    - restage/restart Acmeair application
  
   
-#For Container Services
+# For Container Services
  - docker build -f ./Dockerfile_CS -t registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME .
  - docker push registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME
  - Modify acmeairJAVA.yaml to add registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME as the image name
