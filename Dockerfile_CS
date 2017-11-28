@@ -1,4 +1,4 @@
 FROM websphere-liberty:kernel
 COPY ./server.xml /config/
-ADD ./build/libs/acmeair-java-2.0.0-SNAPSHOT.war /config/apps/
+ADD ./target/acmeair-java-2.0.0-SNAPSHOT.war /config/apps/
 RUN installUtility install  --acceptLicense defaultServer

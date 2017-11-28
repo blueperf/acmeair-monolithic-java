@@ -17,7 +17,7 @@ Use maven to build the project
  - bx cf push acme-java-myname -p ../acmeair -m 512M
   
 #For Container Services
- - docker build -f ./Docker_CS -t registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME .
+ - docker build -f ./Dockerfile_CS -t registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME .
  - docker push registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME
  - Modify acmeairJAVA.yaml to add registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME as the image name
  - kubectl create -f ./acmeairJAVA.yaml

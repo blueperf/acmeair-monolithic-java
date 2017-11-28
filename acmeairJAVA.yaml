@@ -62,4 +62,18 @@ spec:
     kind: Deployment
     name: acme-java-deployment
   targetCPUUtilizationPercentage: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: acme-monolithic
+spec:
+  rules:
+  - host: INGRESS_URL 
+    http:
+      paths:
+      - path: /
+        backend:
+         serviceName: acme-monolithic-service
+         servicePort: 80
 ...
