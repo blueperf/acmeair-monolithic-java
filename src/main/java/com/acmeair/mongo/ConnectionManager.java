@@ -69,7 +69,7 @@ public class ConnectionManager implements MongoConstants {
 			// If MONGO_MANUAL is set to true, it will set up the DB connection
 			// right away
 			if (isManual) {
-				if (!mongoUser.equals("")) {
+				if (mongoUser != null) {
 					MongoCredential credential = MongoCredential.createCredential(mongoUser, dbname,
 							mongoPassword.toCharArray());
 					mongoClient = new MongoClient(new ServerAddress(hostname, port),Arrays.asList(credential));
