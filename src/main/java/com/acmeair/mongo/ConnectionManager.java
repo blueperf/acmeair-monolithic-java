@@ -104,6 +104,7 @@ public class ConnectionManager implements MongoConstants {
 					mongoClient = new MongoClient(hostname, port);
 				}
 			}
+			logger.fine("#### Mongo DB Database Name " + dbname + " ####");
 			db = mongoClient.getDatabase(dbname);
 			logger.info("#### Mongo DB Server " + mongoClient.getAddress().getHost() + " ####");
 			logger.info("#### Mongo DB Port " + mongoClient.getAddress().getPort() + " ####");
