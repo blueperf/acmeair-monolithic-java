@@ -17,7 +17,7 @@ Use maven to build the project
  - bx cf push acme-java-myname -p ../acmeair -m 512M
  
  **Setup DB**
- - First, create a Compost account, then create a Mongo DB Deploument (It is a paid service with 30 days free trial)
+ - First, create a Compost account, then create a Mongo DB Deployment (It is a paid service with 30 days free trial)
  - Create a database with the name "acmeair"
  - get these information:
    - "hostname
