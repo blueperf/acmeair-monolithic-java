@@ -45,3 +45,11 @@ Use maven to build the project
  - Modify acmeairJAVA.yaml to add registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME as the image name
  - Modify acmeairJAVA.yaml to add DB connection information (Note: If there is no user setup for this DB, REMOVE MONGO_USER & MONGO_PASSWORD entries)
  - kubectl create -f ./acmeairJAVA.yaml
+
+# Database loading
+ - Go to the home page http://hostname:port
+ - At the bottom of the page, click the link : Configure the Acme Air Environment > Click **Load the database**
+ 
+# Driving the load
+ - Use AcmeAir-v5.jmx
+ - jmeter -n -t AcmeAir-v5.jmx -DusePureIDs=true -JHOST=hostname -JPORT=80 -j logName -JTHREAD=1 -JUSER=999 -JDURATION=60 -JRAMP=0 ;
