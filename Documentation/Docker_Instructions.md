@@ -13,7 +13,7 @@ Assume you have
 	
 	2. Build/Start Containers
 		a. docker-compose build
-		b. NETWORK=my_net docker-compose up
+		b. NETWORK=my-net docker-compose up
 	
 	3. Go to http://docker_machine_ip/main/acmeair
 	
