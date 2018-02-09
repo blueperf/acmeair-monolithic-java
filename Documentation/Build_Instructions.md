@@ -65,7 +65,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 ## Install the following development tools
 
 * Git for access to the source code (http://msysgit.github.io/ for windows)
-* Gradle for building the project (http://http://gradle.org/gradle-download/)
+* Gradle for building the project (http://gradle.org/gradle-download/)
 * Ensure git and gradle are in your path
 
 ### Clone Git Repo
