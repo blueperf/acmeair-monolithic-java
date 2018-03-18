@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: acme-java-deployment
+  name: acmeair-monolithic-java-deployment
 spec:
   replicas: 1
   template:
@@ -20,15 +20,11 @@ spec:
         - name: MONGO_MANUAL
           value: "true"
         - name: MONGO_HOST
-          value: "MONGO_HOST_VALUE"
+          value: "acmeair-db"
         - name: MONGO_PORT
-          value: "MONGO_PORT_VALUE"
-        - name: MONGO_USER
-          value: "MONGO_USER_VALUE"
-        - name: MONGO_PASSWORD
-          value: "MONGO_PASSWORD_VALUE"
+          value: "27017"
         - name: MONGO_DBNAME
-          value: "MONGO_DBNAME_VALUE"
+          value: "acmeair-db"
         resources:
           requests:
             cpu: "700m"
@@ -36,11 +32,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: acme-monolithic-service
+  name: acmeair-monolithic-service
   labels:
     app: acmeair
     tier: monolithic
-    micro: java
 spec:
   ports:
   - protocol: TCP
@@ -49,31 +44,59 @@ spec:
   selector:
     app: acmeair
     tier: monolithic
-    micro: java
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: acme-java-autoscale
+  name: acmeair-java-autoscale
 spec:
   maxReplicas: 10
   minReplicas: 1
   scaleTargetRef:
     kind: Deployment
-    name: acme-java-deployment
+    name: acmeair-monolithic-java-deployment
   targetCPUUtilizationPercentage: 80
 ---
-apiVersion: extensions/v1beta1
-kind: Ingress
+#### Acmeair Database  #####
+apiVersion: v1
+kind: Service
 metadata:
-  name: acme-monolithic
+  creationTimestamp: null
+  labels:
+    service: acmeair-db
+  name: acmeair-db
 spec:
-  rules:
-  - host: INGRESS_URL 
-    http:
-      paths:
-      - path: /
-        backend:
-         serviceName: acme-monolithic-service
-         servicePort: 80
-...
+  ports:
+  - name: "27017"
+    port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    service: acmeair-db
+status:
+  loadBalancer: {}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: acmeair-db
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        service: acmeair-db
+    spec:
+      containers:
+      - image: mongo
+        name: acmeair-db
+        ports:
+        - containerPort: 27017
+          protocol: TCP
+        resources: {}
+      restartPolicy: Always
+status: {}
+

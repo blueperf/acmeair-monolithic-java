@@ -10,6 +10,7 @@ import org.json.simple.JSONValue;
 
 import com.acmeair.mongo.MongoConstants;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -70,9 +71,17 @@ public class ConnectionManager implements MongoConstants {
 			// right away
 			if (isManual) {
 				if (mongoUser != null) {
-					MongoCredential credential = MongoCredential.createCredential(mongoUser, dbname,
+/*					MongoCredential credential = MongoCredential.createCredential(mongoUser, dbname,
 							mongoPassword.toCharArray());
 					mongoClient = new MongoClient(new ServerAddress(hostname, port),Arrays.asList(credential));
+*/
+					MongoClientOptions.Builder options = new MongoClientOptions.Builder();
+					MongoClientOptions builtOptions = options.build();
+                    mongoClient = new MongoClient(hostname, port);
+                    db = mongoClient.getDatabase(dbname);
+                    MongoCredential credential = MongoCredential.createCredential(mongoUser, dbname,
+							mongoPassword.toCharArray());
+					mongoClient = new MongoClient(new ServerAddress(hostname, port),credential,builtOptions);	
 				}else {
 					mongoClient = new MongoClient(hostname, port);
 				}
