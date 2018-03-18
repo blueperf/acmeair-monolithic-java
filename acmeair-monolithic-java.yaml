@@ -10,7 +10,6 @@ spec:
       labels:
         app: acmeair
         tier: monolithic
-        micro: java
     spec:
       containers:
       - name: acmeair-java
