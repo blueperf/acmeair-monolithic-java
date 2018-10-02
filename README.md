@@ -7,8 +7,8 @@ This version of acmeair supports:
 
 # Setup
 Use maven to build the project
- - git clone https://github.com/blueperf/acmeair -b simple --single-branch
- - cd acmeair
+ - git clone https://github.com/blueperf/acmeair-monolithic-java
+ - cd acmeair-monolithic-java
  - mvn clean package
  
 # For CF
