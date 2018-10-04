@@ -61,5 +61,6 @@ Instead of creating user provided DB service, add these environment variables an
  - At the bottom of the page, click the link : Configure the Acme Air Environment > Click **Load the database**
  
 # Driving the load
- - Use AcmeAir-v5.jmx
+ - Follow the instruction [here](https://github.com/blueperf/acmeair-driver)
+ - Use AcmeAir-v5.jmx insread of AcmeAir-microservices.jmx (Note: there is a limitation for JAX-RS to use root directory)
  - jmeter -n -t AcmeAir-v5.jmx -DusePureIDs=true -JHOST=hostname -JPORT=80 -j logName -JTHREAD=1 -JUSER=999 -JDURATION=60 -JRAMP=0 ;
