@@ -48,7 +48,7 @@ Add these environment variables and restage
 - On IBM Cloud Dasboard, bind the created mongodbCompose service to Acmeair
    - restage/restart Acmeair application 
   
-# For Container Services
+# For Kubernetes Services
  - docker build -f ./Dockerfile_CS -t registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME .
  - docker push registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME
  - Modify acmeair-monolithic-java.yaml to add registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME as the image name
