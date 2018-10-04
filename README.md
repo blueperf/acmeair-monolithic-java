@@ -49,7 +49,7 @@ Add these environment variables and restage
    - restage/restart Acmeair application 
   
 # For Kubernetes Services
- - docker build -f ./Dockerfile_CS -t registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME .
+ - docker build -f ./Dockerfile_KS -t registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME .
  - docker push registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME
  - Modify acmeair-monolithic-java.yaml to add registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME as the image name
  - Modify acmeair-monolithic-java.yaml to add DB connection information (Note: If there is no user setup for this DB, REMOVE MONGO_USER & MONGO_PASSWORD entries)
