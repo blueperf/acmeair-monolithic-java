@@ -15,9 +15,6 @@
 *******************************************************************************/
 package com.acmeair.web;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -42,33 +39,17 @@ public class FlightsREST {
 	public String getTripFlights(
 			@FormParam("fromAirport") String fromAirport,
 			@FormParam("toAirport") String toAirport,
-			@FormParam("fromDate") Date fromDate,
-			@FormParam("returnDate") Date returnDate,
+			@FormParam("fromDate") DateParam fromDate,
+		      @FormParam("returnDate") DateParam returnDate,
 			@FormParam("oneWay") boolean oneWay
 			) {
 		
 		String options = "";
 		
-		// convert date to local timezone
-		Calendar tempDate = new GregorianCalendar();
-		tempDate.setTime(fromDate);
-		// reset hour, minutes, seconds and millis
-		tempDate.set(Calendar.HOUR_OF_DAY, 0);
-		tempDate.set(Calendar.MINUTE, 0);
-		tempDate.set(Calendar.SECOND, 0);
-		tempDate.set(Calendar.MILLISECOND, 0);
-		
-		List<String> toFlights = flightService.getFlightByAirportsAndDepartureDate(fromAirport, toAirport, tempDate.getTime());
+		List<String> toFlights = flightService.getFlightByAirportsAndDepartureDate(fromAirport, toAirport, fromDate.getDate());
 		
 		if (!oneWay) {
-			// convert date to local timezone
-			tempDate.setTime(returnDate);
-			// reset hour, minutes, seconds and millis
-			tempDate.set(Calendar.HOUR_OF_DAY, 0);
-			tempDate.set(Calendar.MINUTE, 0);
-			tempDate.set(Calendar.SECOND, 0);
-			tempDate.set(Calendar.MILLISECOND, 0);
-			List<String> retFlights = flightService.getFlightByAirportsAndDepartureDate(toAirport, fromAirport, tempDate.getTime());
+			List<String> retFlights = flightService.getFlightByAirportsAndDepartureDate(toAirport, fromAirport, returnDate.getDate());
 
 			options = "{\"tripFlights\":" + 
 					"[{\"numPages\":1,\"flightsOptions\": " + toFlights + ",\"currentPage\":0,\"hasMoreOptions\":false,\"pageSize\":10}, " + 
