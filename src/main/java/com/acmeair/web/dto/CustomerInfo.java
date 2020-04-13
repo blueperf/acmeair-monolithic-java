@@ -67,11 +67,11 @@ public class CustomerInfo implements Serializable{
 		this.phoneNumberType = phoneNumberType;
 	}
 	
-	public String getUsername() {
+	public String get_id() {
 		return _id;
 	}
 	
-	public void setUsername(String username) {
+	public void set_id(String username) {
 		this._id = username;
 	}
 	

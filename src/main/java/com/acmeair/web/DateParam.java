@@ -19,7 +19,6 @@ public class DateParam {
             
       LocalDate localDate = LocalDate.parse(dateOnly, formatter);
       date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-      System.out.println("here: " + date);
     } catch ( final Exception ex ) {
       throw new WebApplicationException( ex );
     }

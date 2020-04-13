@@ -82,7 +82,7 @@ public class CustomerServiceImpl extends CustomerService implements MongoConstan
 		if (customerInfo.getAddress().getStreetAddress2() != null){
 			address.append("streetAddress2", customerInfo.getAddress().getStreetAddress2());
 		}
-		customer.updateOne(eq("_id", customerInfo.getUsername()), 
+		customer.updateOne(eq("_id", customerInfo.get_id()), 
 				combine(set("status", customerInfo.getStatus()),
 						set("total_miles", customerInfo.getTotal_miles()),
 						set("miles_ytd", customerInfo.getMiles_ytd()),
