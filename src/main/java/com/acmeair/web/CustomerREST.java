@@ -76,7 +76,9 @@ public class CustomerREST {
 	@Path("/byid/{custid}")
 	@Produces("text/plain")
 	public /* Customer */ Response putCustomer(@CookieParam("sessionid") String sessionid, CustomerInfo customer) {
-		String username = customer.getUsername();
+	  
+		String username = customer.get_id();
+		
 		if (!validate(username)) {
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}

@@ -56,8 +56,15 @@ public class RESTCookieSessionFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse resp,	FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)resp;	
+                
+                String path;
+                String pathInfo = request.getPathInfo();
+                if (pathInfo == null) {
+                  path = request.getContextPath() + request.getServletPath();
+                } else {
+                  path = request.getContextPath() + request.getServletPath() + request.getPathInfo();
+                }
 		
-		String path = request.getContextPath() + request.getServletPath() + request.getPathInfo();
 	
 		
 		if (path.endsWith(LOGIN_PATH) || path.endsWith(LOGOUT_PATH) || path.endsWith(LOADDB_PATH)) {
