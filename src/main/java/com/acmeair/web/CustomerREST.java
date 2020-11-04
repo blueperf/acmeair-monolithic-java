@@ -18,6 +18,7 @@ package com.acmeair.web;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
@@ -30,13 +31,13 @@ import javax.ws.rs.core.Response;
 
 import com.acmeair.service.CustomerService;
 import com.acmeair.service.FlightService;
-import com.acmeair.service.ServiceLocator;
 import com.acmeair.web.dto.CustomerInfo;
 
 @Path("/customer")
 public class CustomerREST {
 	
-	private CustomerService customerService = ServiceLocator.instance().getService(CustomerService.class);
+	@Inject
+	CustomerService customerService;
 	
 	@Context 
 	private HttpServletRequest request;

@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 
 import com.acmeair.service.AuthService;
-import com.acmeair.service.ServiceLocator;
 
 public class RESTCookieSessionFilter implements Filter {
 	
@@ -42,10 +41,8 @@ public class RESTCookieSessionFilter implements Filter {
 	private static final String LOGOUT_PATH = "/rest/api/login/logout";
 	private static final String LOADDB_PATH = "/rest/api/loaddb";
 	
-	private AuthService authService = ServiceLocator.instance().getService(AuthService.class);
-
 	@Inject
-	BeanManager beanManager;
+	AuthService authService;
 	
 	@Override
 	public void destroy() {

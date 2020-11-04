@@ -15,6 +15,7 @@
 *******************************************************************************/
 package com.acmeair.web;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -26,12 +27,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.acmeair.service.BookingService;
-import com.acmeair.service.ServiceLocator;
 
 @Path("/bookings")
 public class BookingsREST {
-	
-	private BookingService bs = ServiceLocator.instance().getService(BookingService.class);
+
+	@Inject
+	private BookingService bs;
 	
 	@POST
 	@Consumes({"application/x-www-form-urlencoded"})

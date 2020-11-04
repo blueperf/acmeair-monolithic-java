@@ -5,12 +5,12 @@ import static com.mongodb.client.model.Updates.combine;
 import static com.mongodb.client.model.Updates.set;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.bson.Document;
 
 import com.acmeair.mongo.MongoConstants;
 import com.acmeair.service.CustomerService;
-import com.acmeair.service.DataService;
 import com.acmeair.web.dto.CustomerInfo;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -19,7 +19,7 @@ import com.acmeair.mongo.ConnectionManager;
 
 
 
-@DataService(name=MongoConstants.KEY,description=MongoConstants.KEY_DESCRIPTION)
+@ApplicationScoped
 public class CustomerServiceImpl extends CustomerService implements MongoConstants {	
 		
 //	private final static Logger logger = Logger.getLogger(CustomerService.class.getName()); 

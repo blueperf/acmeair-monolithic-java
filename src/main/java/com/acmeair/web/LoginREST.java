@@ -15,6 +15,7 @@
 *******************************************************************************/
 package com.acmeair.web;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.FormParam;
@@ -31,7 +32,6 @@ import org.json.simple.JSONObject;
 
 import com.acmeair.service.AuthService;
 import com.acmeair.service.CustomerService;
-import com.acmeair.service.ServiceLocator;
 
 
 @Path("/login")
@@ -39,8 +39,11 @@ public class LoginREST {
 	
 	public static String SESSIONID_COOKIE_NAME = "sessionid";
 			
-	private AuthService authService = ServiceLocator.instance().getService(AuthService.class);
-	private CustomerService customerService = ServiceLocator.instance().getService(CustomerService.class);
+	@Inject
+	private AuthService authService;
+
+	@Inject
+	private CustomerService customerService;
 	
 	
 	@POST

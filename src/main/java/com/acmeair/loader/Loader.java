@@ -21,7 +21,18 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
+@ApplicationScoped
 public class Loader {
+
+	@Inject FlightLoader flightLoader;
+	@Inject	CustomerLoader customerLoader;
+	@Inject	SessionLoader sessionLoader;
+	@Inject BookingLoader bookingLoader;
+
+
 	public static String REPOSITORY_LOOKUP_KEY = "com.acmeair.repository.type";
 
 	private static Logger logger = Logger.getLogger(Loader.class.getName());
@@ -94,10 +105,7 @@ public class Loader {
 	
 	
 	private String execute(long numCustomers) {
-		FlightLoader flightLoader = new FlightLoader();
-		CustomerLoader customerLoader = new CustomerLoader();
-		SessionLoader sessionLoader = new SessionLoader();
-		BookingLoader bookingLoader = new BookingLoader();
+		
 
     	double length = 0;
 		try {

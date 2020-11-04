@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.bson.Document;
@@ -32,7 +33,6 @@ import org.json.simple.parser.ParseException;
 
 import com.acmeair.AirportCodeMapping;
 import com.acmeair.mongo.MongoConstants;
-import com.acmeair.service.DataService;
 import com.acmeair.service.FlightService;
 import com.acmeair.service.KeyGenerator;
 import com.mongodb.BasicDBObject;
@@ -43,7 +43,7 @@ import com.mongodb.client.MongoDatabase;
 
 import com.acmeair.mongo.ConnectionManager;
 
-@DataService(name=MongoConstants.KEY,description=MongoConstants.KEY_DESCRIPTION)
+@ApplicationScoped
 public class FlightServiceImpl extends FlightService implements  MongoConstants {
 
 	//private final static Logger logger = Logger.getLogger(FlightService.class.getName()); 
