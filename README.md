@@ -5,13 +5,27 @@ This application shows an implementation of a fictitious airline called "Acme Ai
 This version of acmeair supports:
   - WebSphere Liberty Profile to Mongodb
 
-# Setup
+# Setup/Build
 Use maven to build the project
  - git clone https://github.com/blueperf/acmeair-monolithic-java
  - cd acmeair-monolithic-java
  - mvn clean package
  
-  **Setup DB**
+ **Quick Setup with docker-compose Instructions**
+
+Prereq: [Install Docker, docker-compose, and start Docker daemon on your local machine](https://docs.docker.com/installation/)
+
+1. cd acmeair-monolithic-java
+2. Create docker network
+ * docker network create --driver bridge my-net
+3. Build/Start Containers. This will build all the micro-services, mongo db instances, and an nginx proxy.
+    * docker-compose --pull build
+    * NETWORK=my-net docker-compose up
+
+4. Go to http://docker_machine_ip/
+5. Go to the Configuration Page and Load the Database
+ 
+  **Other Setups - Setup DB**
  - First, create a Compost account, then create a Mongo DB Deployment (It is a paid service with 30 days free trial)
  - Create a database with the name "acmeair"
  - get these information:
