@@ -64,32 +64,17 @@ public class BookingsREST {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
-	@GET
-	@Path("/bybookingnumber/{userid}/{number}")
-	@Produces("text/plain")
-	public String getBookingByNumber(
-			@PathParam("number") String number,
-			@PathParam("userid") String userid) {
-		try {
-			return bs.getBooking(userid, number);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
+		
 	@GET
 	@Path("/byuser/{user}")
 	@Produces("text/plain")
-	public String getBookingsByUser(@PathParam("user") String user) {
+	public Response getBookingsByUser(@PathParam("user") String user) {
 		try {
-			return  bs.getBookingsByUser(user).toString();
+			return  Response.ok(bs.getBookingsByUser(user).toString()).build();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 
