@@ -88,7 +88,7 @@ public class LoginREST {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 }
