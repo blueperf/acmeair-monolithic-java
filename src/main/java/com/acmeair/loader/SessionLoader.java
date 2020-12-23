@@ -15,13 +15,16 @@
 *******************************************************************************/
 package com.acmeair.loader;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import com.acmeair.service.AuthService;
-import com.acmeair.service.ServiceLocator;
 
-
+@ApplicationScoped
 public class SessionLoader {
 
-	private AuthService authService = ServiceLocator.instance().getService(AuthService.class);
+	@Inject
+	private AuthService authService;
 
 	public void dropSessions() {				
 		authService.dropSessions();

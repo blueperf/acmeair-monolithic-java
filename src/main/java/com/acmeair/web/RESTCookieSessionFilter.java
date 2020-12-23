@@ -17,7 +17,6 @@ package com.acmeair.web;
 
 import java.io.IOException;
 
-import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -32,20 +31,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 
 import com.acmeair.service.AuthService;
-import com.acmeair.service.ServiceLocator;
 
 public class RESTCookieSessionFilter implements Filter {
 	
 	static final String LOGIN_USER = "acmeair.login_user";
 	
 	private static final String LOGIN_PATH = "/rest/api/login";
-	private static final String LOGOUT_PATH = "/rest/api/login/logout";
+	//private static final String LOGOUT_PATH = "/rest/api/login/logout";
 	private static final String LOADDB_PATH = "/rest/api/loaddb";
+	private static final String QUERY_PATH = "/rest/api/flights/queryflights";
 	
-	private AuthService authService = ServiceLocator.instance().getService(AuthService.class);
-
 	@Inject
-	BeanManager beanManager;
+	AuthService authService;
 	
 	@Override
 	public void destroy() {
@@ -67,7 +64,7 @@ public class RESTCookieSessionFilter implements Filter {
 		
 	
 		
-		if (path.endsWith(LOGIN_PATH) || path.endsWith(LOGOUT_PATH) || path.endsWith(LOADDB_PATH)) {
+		if (path.endsWith(LOGIN_PATH) || path.endsWith(LOADDB_PATH) || path.endsWith(QUERY_PATH)) {
 			// if logging in, logging out, or loading the database, let the request flow
 			chain.doFilter(req, resp);
 			return;
@@ -90,6 +87,7 @@ public class RESTCookieSessionFilter implements Filter {
 			// did this check as the logout currently sets the cookie value to "" instead of aging it out
 			// see comment in LogingREST.java
 			if (sessionId.equals("")) {
+				
 				response.sendError(HttpServletResponse.SC_FORBIDDEN);
 				return;
 			}
@@ -101,6 +99,7 @@ public class RESTCookieSessionFilter implements Filter {
 				chain.doFilter(req, resp);
 				return;
 			} else {
+				
 				response.sendError(HttpServletResponse.SC_FORBIDDEN);
 				return;
 			}

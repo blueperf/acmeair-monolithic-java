@@ -15,6 +15,7 @@
 *******************************************************************************/
 package com.acmeair.web;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -26,12 +27,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.acmeair.service.BookingService;
-import com.acmeair.service.ServiceLocator;
 
 @Path("/bookings")
 public class BookingsREST {
-	
-	private BookingService bs = ServiceLocator.instance().getService(BookingService.class);
+
+	@Inject
+	private BookingService bs;
 	
 	@POST
 	@Consumes({"application/x-www-form-urlencoded"})
@@ -63,32 +64,17 @@ public class BookingsREST {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
-	@GET
-	@Path("/bybookingnumber/{userid}/{number}")
-	@Produces("text/plain")
-	public String getBookingByNumber(
-			@PathParam("number") String number,
-			@PathParam("userid") String userid) {
-		try {
-			return bs.getBooking(userid, number);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
+		
 	@GET
 	@Path("/byuser/{user}")
 	@Produces("text/plain")
-	public String getBookingsByUser(@PathParam("user") String user) {
+	public Response getBookingsByUser(@PathParam("user") String user) {
 		try {
-			return  bs.getBookingsByUser(user).toString();
+			return  Response.ok(bs.getBookingsByUser(user).toString()).build();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 

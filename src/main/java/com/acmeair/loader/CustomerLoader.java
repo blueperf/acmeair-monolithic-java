@@ -15,16 +15,21 @@
 *******************************************************************************/
 package com.acmeair.loader;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import com.acmeair.service.CustomerService;
-import com.acmeair.service.ServiceLocator;
 
 
+@ApplicationScoped
 public class CustomerLoader {
 
-	private CustomerService customerService = ServiceLocator.instance().getService(CustomerService.class);
+	@Inject
+	CustomerService customerService;
 
-	public void dropCustomers() {				
-			customerService.dropCustomers();
+	public void dropCustomers() {		
+		System.out.println(customerService);		
+		customerService.dropCustomers();
 	}
 	
 	public void loadCustomers(long numCustomers) {				

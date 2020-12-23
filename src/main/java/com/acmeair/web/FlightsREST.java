@@ -17,6 +17,7 @@ package com.acmeair.web;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -24,12 +25,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import com.acmeair.service.FlightService;
-import com.acmeair.service.ServiceLocator;
 
 @Path("/flights")
 public class FlightsREST {
 	
-	private FlightService flightService = ServiceLocator.instance().getService(FlightService.class);
+	@Inject
+	private FlightService flightService;
 	
 	// TODO:  Consider a pure GET implementation of this service, but maybe not much value due to infrequent similar searches
 	@POST

@@ -15,13 +15,17 @@
 *******************************************************************************/
 package com.acmeair.loader;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import com.acmeair.service.BookingService;
-import com.acmeair.service.ServiceLocator;
 
 
+@ApplicationScoped
 public class BookingLoader {
 
-	private BookingService bookingService = ServiceLocator.instance().getService(BookingService.class);
+	@Inject
+	BookingService bookingService;
 
 	public void dropBookings() {				
 			bookingService.dropBookings();

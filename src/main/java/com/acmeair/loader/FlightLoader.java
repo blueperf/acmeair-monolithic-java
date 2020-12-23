@@ -20,18 +20,22 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.*;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import com.acmeair.service.FlightService;
-import com.acmeair.service.ServiceLocator;
 
 import com.acmeair.AirportCodeMapping;
 
 
+@ApplicationScoped
 public class FlightLoader {
 	
 	private static final int MAX_FLIGHTS_PER_SEGMENT = 5;
 	
 
-	private FlightService flightService = ServiceLocator.instance().getService(FlightService.class);
+	@Inject
+	private FlightService flightService;
 
 	public void dropFlights() {				
 		flightService.dropFlights();

@@ -34,4 +34,6 @@ public interface BookingService {
 	Long count();
 
 	void dropBookings();
+
+	String getServiceType();
 }

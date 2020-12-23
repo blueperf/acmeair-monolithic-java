@@ -1,0 +1,17 @@
+acmeair-db:
+  container_name: acmeair-db
+  image: mongo
+  net: ${NETWORK}
+
+acmeair-monolithic-java:
+  container_name: acmeair-monolithic-java
+  dockerfile: Dockerfile
+  net: ${NETWORK}
+  build: .
+  ports:
+    - "80:9080"
+  environment:
+    - MONGO_HOST=acmeair-db
+  volumes_from:
+    - acmeair-db
+  mem_limit: 1024m

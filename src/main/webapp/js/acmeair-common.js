@@ -66,7 +66,7 @@ function login() {
 				alert('error logging in, response: ' + response);
 				return;
 			}
-			dojo.cookie("loggedinuser", userString, {expires: 5});
+			dojo.cookie("loggedinuser", userString, {expires: 5, path: '/'});
 			updateLoggedInUserWelcome();
 		},
 		error: function(response, ioArgs) {
@@ -94,7 +94,8 @@ function logout() {
 				alert('error logging out, response: ' + response);
 				return;
 			}
-			dojo.cookie("loggedinuser", null, {expires: -1});
+			dojo.cookie("loggedinuser", null, {expires: -1, path: '/'});
+			dojo.cookie("acmeair_sessionid", null, {expires: -1, path: '/'});
 			updateLoggedInUserWelcome();
 		},
 		error: function(response, ioArgs) {
