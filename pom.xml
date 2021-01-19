@@ -20,11 +20,11 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>acmeair-java</groupId>
-  <version>2.0.0-SNAPSHOT</version>
-  <artifactId>acmeair-java</artifactId>
+  <groupId>acmeair-monolithic</groupId>
+  <version>9.0.0</version>
+  <artifactId>acmeair-monolithic</artifactId>
   <packaging>war</packaging>
-  <name>Acmeair :: Java</name>
+  <name>Acmeair :: Monolithic</name>
 
   <properties>
     <version.maven-war-plugin>3.2.2</version.maven-war-plugin>
@@ -55,10 +55,10 @@
                         <default.http.port>${testServerHttpPort}</default.http.port>
                         <default.https.port>${testServerHttpsPort}</default.https.port>
                         <app.context.root>${warContext}</app.context.root>
-                    </bootstrapProperties>
-                   <!--<install>
-                      <runtimeUrl>https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/nightly/2020-11-06_1100/openliberty-all-20.0.0.12-cl201220201106-1100.zip</runtimeUrl>
-                    </install>-->
+                    </bootstrapProperties>/06
+                    <install>
+                      <runtimeUrl>https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/nightly/2021-01-19_1100/openliberty-all-21.0.0.1-cl210220210119-1100.zip</runtimeUrl>
+                    </install>
                 </configuration>
             </plugin>
             <!-- Plugin to run unit tests -->
@@ -127,10 +127,10 @@
 
   <dependencies>
     <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-api</artifactId>
+      <groupId>jakarta.platform</groupId>
+      <artifactId>jakarta.jakartaee-api</artifactId>
+      <version>9.0.0</version>
       <scope>provided</scope>
-      <version>7.0</version>
     </dependency>
     <dependency>
       <groupId>org.mongodb</groupId>

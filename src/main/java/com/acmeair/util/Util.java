@@ -34,7 +34,6 @@ public class Util {
 			try {
 				SERVICE_IP = Inet4Address.getLocalHost().getHostAddress();
 			} catch (UnknownHostException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			JSONObject jsonObj = new JSONObject();

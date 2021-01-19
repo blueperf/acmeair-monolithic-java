@@ -21,8 +21,8 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class Loader {
@@ -257,11 +257,11 @@ public class Loader {
 
 		String type = null;
 		String lookup = REPOSITORY_LOOKUP_KEY.replace('.', '/');
-		javax.naming.Context context = null;
-		javax.naming.Context envContext;
+		jakarta.naming.Context context = null;
+		jakarta.naming.Context envContext;
 		try {
-			context = new javax.naming.InitialContext();
-			envContext = (javax.naming.Context) context.lookup("java:comp/env");
+			context = new jakarta.naming.InitialContext();
+			envContext = (jakarta.naming.Context) context.lookup("java:comp/env");
 			if (envContext != null)
 				type = (String) envContext.lookup(lookup);
 		} catch (NamingException e) {

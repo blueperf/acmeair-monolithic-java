@@ -18,22 +18,22 @@ package com.acmeair.web;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.CookieParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.CookieParam;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Response;
 
 import com.acmeair.service.CustomerService;
 import com.acmeair.service.FlightService;
 import com.acmeair.web.dto.CustomerInfo;
 
-@Path("/customer")
+@Path("/api/customer")
 public class CustomerREST {
 	
 	@Inject

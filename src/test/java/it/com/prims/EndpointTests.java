@@ -42,8 +42,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Cookie;
 
 import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.runners.MethodSorters;
 import org.junit.After;

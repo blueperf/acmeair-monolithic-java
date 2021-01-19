@@ -4,8 +4,8 @@ import static com.mongodb.client.model.Filters.eq;
 
 import java.util.Date;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.bson.Document;
 
