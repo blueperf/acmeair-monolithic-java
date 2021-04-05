@@ -38,7 +38,7 @@ public class RESTCookieSessionFilter implements Filter {
 	
 	private static final String LOGIN_PATH = "/rest/api/login";
 	//private static final String LOGOUT_PATH = "/rest/api/login/logout";
-	private static final String LOADDB_PATH = "/rest/api/loaddb";
+	private static final String LOADDB_PATH = "/rest/api/loader/load";
 	private static final String QUERY_PATH = "/rest/api/flights/queryflights";
 	
 	@Inject
@@ -63,7 +63,6 @@ public class RESTCookieSessionFilter implements Filter {
                 }
 		
 	
-		
 		if (path.endsWith(LOGIN_PATH) || path.endsWith(LOADDB_PATH) || path.endsWith(QUERY_PATH)) {
 			// if logging in, logging out, or loading the database, let the request flow
 			chain.doFilter(req, resp);
