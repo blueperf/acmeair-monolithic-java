@@ -1,10 +1,14 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: acmeair-monolithic-java-deployment
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: acmeair
+      tier: monolithic
   template:
     metadata:
       labels:
@@ -13,21 +17,46 @@ spec:
     spec:
       containers:
       - name: acmeair-java
-        image: IMAGE_NAME
-        imagePullPolicy: Always
+        #image: IMAGE_NAME
+        #imagePullPolicy: Always
+        image: acmeair-test
+        imagePullPolicy: Never
         env:
+        - name: WLP_LOGGING_CONSOLE_FORMAT
+          value: "dev"
+        - name: WLP_LOGGING_CONSOLE_LOGLEVEL
+          value: "info"
+        - name: WLP_LOGGING_CONSOLE_SOURCE
+          value: "message,trace,accessLog,ffdc,audit"
         - name: MONGO_MANUAL
           value: "true"
         - name: MONGO_HOST
-          value: "localhost"
+          #value: "localhost"
+          # for kubernetes deployment
+          value: "acmeair-db"
         - name: MONGO_PORT
           value: "27017"
+          # comment user:pass if using a default mongo deployment
         - name: MONGO_DBNAME
           value: "acmeair"
-        - name: MONGO_USER
-          value: "user"
-        - name: MONGO_PASSWORD
-          value: "password"
+        #- name: MONGO_USER
+        #  value: "user"
+        #- name: MONGO_PASSWORD
+        #  value: "password"
+        - name: MONGO_MAX_CONNECTIONS
+          value: "100" # default
+        - name: MONGO_MIN_CONNECTIONS
+          value: "10"  # default
+        - name: MONGO_CONNECTION_TIMEOUT
+          value: "10"  # default
+        - name: CORE_THREADS
+          value: "-1"  # default
+        - name: MAX_THREADS
+          value: "-1"  # default
+        - name: PERSIST_TIMEOUT # Amount of time that a socket will be allowed to remain idle between requests.
+          value: "30"  # default
+        - name: MAX_KEEP_ALIVE_REQUESTS
+          value: "-1" # default
         resources:
           requests:
             cpu: "700m"
@@ -40,9 +69,10 @@ metadata:
     app: acmeair
     tier: monolithic
 spec:
+  type: NodePort
   ports:
   - protocol: TCP
-    port: 80
+    port: 9080
     name: http
   selector:
     app: acmeair
@@ -79,7 +109,7 @@ spec:
 status:
   loadBalancer: {}
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   creationTimestamp: null
@@ -87,6 +117,9 @@ metadata:
 spec:
   replicas: 1
   strategy: {}
+  selector:
+    matchLabels:
+      service: acmeair-db
   template:
     metadata:
       creationTimestamp: null
@@ -96,6 +129,11 @@ spec:
       containers:
       - image: mongo
         name: acmeair-db
+          #env:
+          #- name: MONGO_INITDB_ROOT_USERNAME
+          #  value: "user"
+          #- name: MONGO_INITDB_ROOT_PASSWORD
+          #  value: "password"
         ports:
         - containerPort: 27017
           protocol: TCP

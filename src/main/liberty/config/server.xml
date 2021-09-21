@@ -4,7 +4,11 @@
     <featureManager>
          <feature>cdi-2.0</feature>
          <feature>jaxrs-2.1</feature>
+         <feature>mpMetrics-2.0</feature>
+         <feature>monitor-1.0</feature>
     </featureManager>
+
+    <mpMetrics authentication="false"/>
 
     <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
     <httpEndpoint id="defaultHttpEndpoint"
@@ -12,5 +16,27 @@
                   httpPort="9080"
                   httpsPort="9443" />
 
+    <!-- Reuse cookies accross multiple replicas -->
+    <remoteIp proxies="" useRemoteIpInAccessLog="false"/>
+
+    <variable name="CORE_THREADS" defaultValue="-1"/>
+    <variable name="MAX_THREADS" defaultValue="-1"/>
+    <executor
+            name="LargeThreadPool"
+            id="default"
+            coreThreads="${CORE_THREADS}"
+            maxThreads="${MAX_THREADS}"
+            keepAlive="60s"
+            stealPolicy="LOCAL"
+            rejectedWorkPolicy="CALLER_RUNS"/>
+
+    <variable name="PERSIST_TIMEOUT" defaultValue="30"/>
+    <variable name="MAX_KEEP_ALIVE_REQUESTS" defaultValue="-1"/>
+    <httpOptions
+            persistTimeout="${PERSIST_TIMEOUT}"
+            maxKeepAliveRequests="${MAX_KEEP_ALIVE_REQUESTS}"/>
+
     <webApplication name="acmeair-monolithic" location="acmeair-java-2.0.0-SNAPSHOT.war" contextRoot="/"/>
 </server>
+
+
