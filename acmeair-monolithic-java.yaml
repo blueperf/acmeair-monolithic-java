@@ -17,10 +17,8 @@ spec:
     spec:
       containers:
       - name: acmeair-java
-        #image: IMAGE_NAME
-        #imagePullPolicy: Always
-        image: acmeair-test
-        imagePullPolicy: Never
+        image: IMAGE_NAME
+        imagePullPolicy: Always
         env:
         - name: WLP_LOGGING_CONSOLE_FORMAT
           value: "dev"
