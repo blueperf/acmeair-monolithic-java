@@ -1,7 +1,9 @@
 FROM acmeair-mono-base-minimal
 
-COPY --chown=1001:0 src/main/liberty/config/server.xml /opt/ol/wlp/usr/servers/defaultServer/server.xml
-COPY --chown=1001:0 target/acmeair-java-2.0.0-SNAPSHOT.war /opt/ol/wlp/usr/servers/defaultServer/apps/
+ARG WAR_FILE
+
+COPY --chown=1001:0 src/main/liberty/config/* /opt/ol/wlp/usr/servers/defaultServer/
+COPY --chown=1001:0 ${WAR_FILE} /opt/ol/wlp/usr/servers/defaultServer/apps/
 
 # start/stop to set conig cache
 RUN server start && server stop
