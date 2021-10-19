@@ -30,9 +30,9 @@ RUN apt-get update \
 
 COPY --chown=1001:0 --from=buildLiberty_minify /tmp/ol /opt/ol/
 COPY --chown=1001:0 ${WAR_FILE} /tmp
-COPY getJavaDependencies.sh /tmp
-COPY java_modules_append.txt /tmp
-COPY java_modules_exclude.txt /tmp
+COPY /jdeps/getJavaDependencies.sh /tmp
+COPY /jdeps/java_modules_append.txt /tmp
+COPY /jdeps/java_modules_exclude.txt /tmp
 
 # Scan the jars in /opt/ol/wlp/lib, the jars in the app at WEB-INF/lib
 # and the classes in WEB-INF/classes for Java Module Dependencies (jdeps)
