@@ -1,6 +1,8 @@
 ### CREATE SMALL LIBERTY IMAGE ###
 FROM open-liberty:kernel-slim-java11-openj9 as buildLiberty_minify
 
+ARG CONFIG_DIRECTORY
+
 # Install unzip; needed to unzip Open Liberty
 USER root
 RUN apt-get update \
@@ -8,18 +10,17 @@ RUN apt-get update \
 USER 1001
 
 # Copy in a server.xml to start server with correct features set
-COPY --chown=1001:0 src/main/liberty/config /config
+COPY --chown=1001:0 ${CONFIG_DIRECTORY} /config
 RUN features.sh
 
 # Create a minified openliberty package for use in final image
 RUN /opt/ol/wlp/bin/server package --archive=/tmp/ol_minified.zip --include=minify --os=Linux
 
-RUN ls -l /tmp/ol_minified.zip
-
 WORKDIR /tmp
 
 RUN unzip -q /tmp/ol_minified.zip -d /tmp/ol
 
+### CREATE SMALL JRE IMAGE ###
 FROM ibmsemeruruntime/open-11-jdk:focal-jdk-latest as buildjre
 
 ARG WAR_FILE
@@ -29,26 +30,37 @@ RUN apt-get update \
 
 COPY --chown=1001:0 --from=buildLiberty_minify /tmp/ol /opt/ol/
 COPY --chown=1001:0 ${WAR_FILE} /tmp
-COPY getJDeps.sh /
-COPY java_modules_append.txt /
-COPY java_modules_exclude.txt /
+COPY getJavaDependencies.sh /tmp
+COPY java_modules_append.txt /tmp
+COPY java_modules_exclude.txt /tmp
 
-RUN cd /tmp && unzip $(basename ${WAR_FILE})
-RUN cd / && /getJDeps.sh /opt/ol/wlp/lib --jars
-RUN /getJDeps.sh /tmp/WEB-INF/lib --jars --append
-RUN /getJDeps.sh /tmp/WEB-INF/classes --append
-RUN echo -n "," >> /java_modules.txt && cat /java_modules_append.txt >> /java_modules.txt
-RUN cat /java_modules.txt
+# Scan the jars in /opt/ol/wlp/lib, the jars in the app at WEB-INF/lib
+# and the classes in WEB-INF/classes for Java Module Dependencies (jdeps)
+# Exlcude any jdeps listed in java_modules_exclude.txt
+# and add any jdeps found in java_modules_append.txt.
+RUN cd /tmp && unzip $(basename ${WAR_FILE}) \
+      && /tmp/getJavaDependencies.sh /opt/ol/wlp/lib --jars \
+      && /tmp/getJavaDependencies.sh /tmp/WEB-INF/lib --jars \
+      && /tmp/getJavaDependencies.sh /tmp/WEB-INF/classes \
+      && echo -n "," >> /tmp/java_modules.txt \ 
+      && cat /tmp/java_modules_append.txt >> /tmp/java_modules.txt \
+      && cat /tmp/java_modules.txt
 
 RUN /opt/java/openjdk/bin/jlink --no-header-files \
            --no-man-pages --compress=2 \
            --strip-debug \
-           --add-modules $(cat /java_modules.txt) \
+           --add-modules $(cat /tmp/java_modules.txt) \
            --output /opt/jdk11-minified
 
-### CREATE SCC ###
+### CREATE BASE SCC LAYER ###
 FROM registry.access.redhat.com/ubi8/ubi-minimal as buildscc
 
+RUN mkdir -p /output/workarea && mkdir -p /output/.classCache \
+    && chown -R 1001:0 /output && chmod -R g+rw /output 
+
+USER 1001
+
+ARG CONFIG_DIRECTORY
 ARG WAR_FILE
 
 ### copy in the minified java11 jre
@@ -56,37 +68,45 @@ COPY --chown=1001:0 --from=buildjre /opt/jdk11-minified /opt/jdk11-minified
 
 ## copy in the minified package of open liberty
 COPY --chown=1001:0 --from=buildLiberty_minify /tmp/ol /opt/ol/
+COPY --chown=1001:0 --from=buildLiberty_minify /opt/ol/helpers/build/populate_scc.sh /opt/ol/helpers/build/populate_scc.sh
 
 # Config
-COPY --chown=1001:0 src/main/liberty/config/* /opt/ol/wlp/usr/servers/defaultServer/
-COPY --chown=1001:0 ${WAR_FILE}  /opt/ol/wlp/usr/servers/defaultServer/apps/
+COPY --chown=1001:0 ${CONFIG_DIRECTORY}/* /opt/ol/wlp/usr/servers/defaultServer/
 
 ENV JAVA_HOME=/opt/jdk11-minified
-ENV OPENJ9_JAVA_OPTIONS="-XX:+IgnoreUnrecognizedVMOptions -XX:+IdleTuningGcOnIdle -Xshareclasses:name=liberty,cacheDir=/output/.scc -Dosgi.checkConfiguration=false"
 
-#### Starting the server will populate the SCC
-ENV PATH=/opt/ol/wlp/bin:$PATH
-RUN server start && server stop && server start && server stop
+#### Run populate_scc.sh script
+ENV PATH=/opt/ol/wlp/bin:/opt/ol/helpers/build:/opt/jdk11-minified/bin:$PATH
+ARG VERBOSE=true
+RUN populate_scc.sh -i 1
 
 ### FINAL BASE IMAGE ###
 
 ### Get the ubi
 FROM registry.access.redhat.com/ubi8/ubi-minimal
 
+RUN mkdir -p /output/workarea && mkdir -p /output/.classCache \
+    && chown -R 1001:0 /output && chmod -R g+rw /output 
+
+USER 1001
+
+ARG CONFIG_DIRECTORY
+
 ### copy in the minified java11 jre
 COPY --chown=1001:0 --from=buildjre /opt/jdk11-minified /opt/jdk11-minified
 
 ## copy in the minified package of open liberty
 COPY --chown=1001:0 --from=buildLiberty_minify /tmp/ol /opt/ol/
+COPY --chown=1001:0 --from=buildLiberty_minify /opt/ol/helpers/build/populate_scc.sh /opt/ol/helpers/build/populate_scc.sh
 
 ## copy in the populated SCC from build_scc
-COPY --chown=1001:0 --from=buildscc /output/.scc /output/.scc
+COPY --chown=1001:0 --from=buildscc /output/.classCache /output/.classCache
 
 # Config
-COPY --chown=1001:0 src/main/liberty/config/* /opt/ol/wlp/usr/servers/defaultServer/
+COPY --chown=1001:0 ${CONFIG_DIRECTORY}/* /opt/ol/wlp/usr/servers/defaultServer/
 
-ENV PATH=/opt/ol/wlp/bin:$PATH
+ENV PATH=/opt/ol/wlp/bin:/opt/ol/helpers/build:/opt/jdk11-minified/bin:$PATH
 ENV JAVA_HOME=/opt/jdk11-minified
-ENV OPENJ9_JAVA_OPTIONS="-XX:+IgnoreUnrecognizedVMOptions -XX:+IdleTuningGcOnIdle -Xshareclasses:name=liberty,cacheDir=/output/.scc,readonly -Dosgi.checkConfiguration=false"
+ENV OPENJ9_JAVA_OPTIONS="-XX:+IgnoreUnrecognizedVMOptions -XX:+IdleTuningGcOnIdle -Xshareclasses:name=liberty,readonly,cacheDir=/output/.classCache -Dosgi.checkConfiguration=false"
 
 CMD ["/opt/ol/wlp/bin/server", "run", "defaultServer"]
