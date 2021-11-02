@@ -20,12 +20,11 @@ WORKDIR /tmp
 RUN unzip -q /tmp/ol_minified.zip -d /tmp/ol
 
 ### CREATE SMALL JRE IMAGE ###
-FROM ibmsemeruruntime/open-11-jdk:focal-jdk-latest as buildjre
+FROM ibmsemeruruntime/open-11-jdk:ubi-jdk as buildjre
 
 ARG WAR_FILE
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends unzip
+RUN yum -y install unzip
 
 COPY --chown=1001:0 --from=buildLiberty_minify /tmp/ol /opt/ol/
 COPY --chown=1001:0 ${WAR_FILE} /tmp

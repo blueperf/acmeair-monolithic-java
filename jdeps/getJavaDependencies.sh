@@ -3,7 +3,7 @@
 parse_list () {
   for value in ${list}
   do 
-    if [[ ! " ${jdeps_list[*]} " =~ " ${value} " ]] && [[ ! "${value}" == */* ]] && [[ ! " ${exclude_list[*]} " =~ " ${value} " ]] 
+    if [[ ! " ${jdeps_list[*]} " =~ " ${value} " ]] && [[ ! " ${exclude_list[*]} " =~ " ${value} " ]] 
     then
       echo "Adding $value"
       jdeps_list+=($value)
