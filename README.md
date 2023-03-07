@@ -37,7 +37,7 @@ Prereq: [Install Docker, docker-compose, and start Docker daemon on your local m
  
 # For CF
  - mkdir apps
- - cp target/acmeair-java-2.0.0-SNAPSHOT.war apps
+ - cp target/aacmeair-monolithic-jakarta.war apps
  - ibmcloud cf push acme-java-myname -p ../acmeair -m 512M
  
 Add these environment variables and restage

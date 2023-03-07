@@ -20,8 +20,8 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>acmeair-monolithic</groupId>
-  <version>9.0.0</version>
+  <groupId>acmeair-monolithic-jakarta</groupId>
+  <version>2.0.0</version>
   <artifactId>acmeair-monolithic</artifactId>
   <packaging>war</packaging>
   <name>Acmeair :: Monolithic</name>
@@ -38,6 +38,7 @@
   </properties>
   
   <build>
+       <finalName>acmeair-monolithic-jakarta</finalName>
       <plugins>
             <!-- Enable liberty-maven plugin -->
             <plugin>
@@ -55,9 +56,9 @@
                         <default.http.port>${testServerHttpPort}</default.http.port>
                         <default.https.port>${testServerHttpsPort}</default.https.port>
                         <app.context.root>${warContext}</app.context.root>
-                    </bootstrapProperties>/06
+                    </bootstrapProperties>
                     <install>
-                      <runtimeUrl>https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/nightly/2021-01-19_1100/openliberty-all-21.0.0.1-cl210220210119-1100.zip</runtimeUrl>
+                      <!--<runtimeUrl>https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/nightly/2021-01-19_1100/openliberty-all-21.0.0.1-cl210220210119-1100.zip</runtimeUrl>-->
                     </install>
                 </configuration>
             </plugin>
