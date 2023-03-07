@@ -2,14 +2,14 @@ package com.acmeair.config;
 
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonBuilderFactory;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
+import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonBuilderFactory;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Response;
 
 import com.acmeair.service.AuthService;
 import com.acmeair.service.BookingService;
@@ -17,7 +17,7 @@ import com.acmeair.service.CustomerService;
 import com.acmeair.service.FlightService;
 
 
-@Path("/config")
+@Path("/info/config")
 public class AcmeAirConfiguration {
     
 	private static Logger logger = Logger.getLogger(AcmeAirConfiguration.class.getName());

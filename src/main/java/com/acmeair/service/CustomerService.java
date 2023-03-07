@@ -15,7 +15,7 @@
 *******************************************************************************/
 package com.acmeair.service;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
