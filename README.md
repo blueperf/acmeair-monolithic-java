@@ -1,32 +1,23 @@
-# Acme Air Sample and Benchmark (monolithic simple version)
+### Acme Air Monolith Sample and Benchmark for MongoDB
 
-This application shows an implementation of a fictitious airline called "Acme Air".  The application was built with some key business requirements: the ability to scale to billions of web API calls per day, the need to develop and deploy the application targeting multiple cloud platforms (including Public, Private and hybrid).  The application can be deployed both on-prem as well as on Cloud platforms. 
+This application shows an implementation of a fictitious airline called "Acme Air" to exercise OpenLiberty JEE Profile with MongoDB as a datastore.
 
-This version of acmeair supports:
-  - WebSphere Liberty Profile to Mongodb
+The application is forked from https://github.com/blueperf/acmeair-monolithic-java
 
-# Setup/Build
+The application depends on: 
+
+> mongodb | 4.4.18 | docker pull icr.io/ppc64le-oss/mongodb-ppc64le:4.4.18
+
+### Setup/Build
 Use maven to build the project
- - git clone https://github.com/blueperf/acmeair-monolithic-java
+ - git clone https://github.com/prb112/acmeair-monolithic-java
  - cd acmeair-monolithic-java
  - mvn clean package
- 
- **Quick Setup with docker-compose Instructions**
 
-Prereq: [Install Docker, docker-compose, and start Docker daemon on your local machine](https://docs.docker.com/installation/)
-
-1. cd acmeair-monolithic-java
-2. Create docker network
- * docker network create --driver bridge my-net
-3. Build/Start Containers. This will build all the micro-services, mongo db instances, and an nginx proxy.
-    * docker-compose --pull build
-    * NETWORK=my-net docker-compose up
-
-4. Go to http://docker_machine_ip/
-5. Go to the Configuration Page and Load the Database
+- Setup Maven `brew install maven`
  
   **Other Setups - Setup DB**
- - First, create a Compost account, then create a Mongo DB Deployment (It is a paid service with 30 days free trial)
+ - First, create a Compost account, then create a Apache Cassandra DB Deployment (It is a paid service with 30 days free trial)
  - Create a database with the name "acmeair"
  - get these information:
    - "hostname
@@ -34,40 +25,12 @@ Prereq: [Install Docker, docker-compose, and start Docker daemon on your local m
    - "db"
    - "username"
    - "password"
- 
-# For CF
- - mkdir apps
- - cp target/aacmeair-monolithic-jakarta.war apps
- - ibmcloud cf push acme-java-myname -p ../acmeair -m 512M
- 
-Add these environment variables and restage
-   - MONGO_MANUAL : true
-   - MONGO_HOST : <hostname>
-   - MONGO_PORT : <port>
-   - MONGO_DBNAME : <db>
-   - MONGO_USER : <username>
-   - MONGO_PASSWORD : <password>
 
-(Alternative) 
-**Create user provided DB Service**
-- Create a string using Compose database information:
-   - "url": "mongodb://username:password@hostname:port/db"
-   - e.g. mongodb://acmeuser:password@myServer.dblayer.com:27017/acmeair
- 
-- Use CF command to create DB:
-   - cf cups mongodbCompose -p "url"
-   - At the URL prompt, enter above URL that was created:
-   - url>mongodb://acmeuser:password@myServer.dblayer.com:27017/acmeair
- 
-- On IBM Cloud Dasboard, bind the created mongodbCompose service to Acmeair
-   - restage/restart Acmeair application 
-  
-# For Kubernetes Services
- - docker build -f ./Dockerfile_KS -t registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME .
- - docker push registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME
- - Modify acmeair-monolithic-java.yaml to add registry.**REGION**.bluemix.net/**NAMESPACE**/IMAGENAME as the image name
- - Modify acmeair-monolithic-java.yaml to add DB connection information (Note: If there is no user setup for this DB, REMOVE MONGO_USER & MONGO_PASSWORD entries)
- - kubectl create -f ./acmeair-monolithic-java.yaml
+acmeair-monolithic-java on  main [✘!?] 
+❯ export MONGODB_USER=$(echo admin | base64) 
+
+acmeair-monolithic-java on  main [✘!?] 
+❯ export MONGODDB_PASS=$(echo pass1234 | base64)
 
 # Database loading
  - Go to the home page http://hostname:port
@@ -75,5 +38,9 @@ Add these environment variables and restage
  
 # Driving the load
  - Follow the instruction [here](https://github.com/blueperf/acmeair-driver)
- - Use AcmeAir-v5.jmx insread of AcmeAir-microservices.jmx (Note: there is a limitation for JAX-RS to use root directory)
- - jmeter -n -t AcmeAir-v5.jmx -DusePureIDs=true -JHOST=hostname -JPORT=80 -j logName -JTHREAD=1 -JUSER=999 -JDURATION=60 -JRAMP=0 ;
+ - Use performance/acmeair.jmx 
+ - jmeter -n -t performance/acmeair.jmx -DusePureIDs=true -JHOST=hostname -JPORT=80 -j logName -JTHREAD=1 -JUSER=999 -JDURATION=60 -JRAMP=0 ;
+
+The code may not use https://www.mongodb.com/docs/drivers/java/sync/current/fundamentals/connection/connect/
+
+Thanks for DevOpsCube for https://devopscube.com/deploy-mongodb-kubernetes/

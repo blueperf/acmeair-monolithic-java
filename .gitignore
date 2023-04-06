@@ -1,5 +1,4 @@
 bin/
-build/
 .settings/
 .metadata
 .classpath
@@ -7,3 +6,4 @@ build/
 .gradle
 .DS_Store
 target
+**/target/*
