@@ -20,23 +20,22 @@ RUN unzip -q /tmp/ol_minified.zip -d /tmp/ol
 ### CREATE SMALL JRE IMAGE ###
 FROM ibmsemeruruntime/open-11-jdk:ubi-jdk as buildjre
 
-RUN yum -y install unzip
-
 COPY --chown=1001:0 --from=buildLiberty_minify /tmp/ol /opt/ol/
-# If you already know the Java modules required, you can list them in jdeps/java_modules.txt and
+# If you already know the Java modules required, you can list them in deps/java_modules.txt and
 # uncomment the line directly below. Then comment out all the lines below that line until the jlink invocation.
-#COPY /jdeps/java_modules.txt /tmp
+#COPY /deps/java_modules.txt /tmp
 
 COPY --chown=1001:0 ${WAR_FILE} /tmp
-COPY /jdeps/getJavaDependencies.sh /tmp
-COPY /jdeps/java_modules_append.txt /tmp
-COPY /jdeps/java_modules_exclude.txt /tmp
+COPY /deps/getJavaDependencies.sh /tmp
+COPY /deps/java_modules_append.txt /tmp
+COPY /deps/java_modules_exclude.txt /tmp
 
 # Scan the jars in /opt/ol/wlp/lib, the jars in the app at WEB-INF/lib
-# and the classes in WEB-INF/classes for Java Module Dependencies (jdeps)
-# Exlcude any jdeps listed in java_modules_exclude.txt
-# and add any jdeps found in java_modules_append.txt.
-RUN cd /tmp && unzip $(basename ${WAR_FILE}) \
+# and the classes in WEB-INF/classes for Java Module Dependencies (deps)
+# Exlcude any deps listed in java_modules_exclude.txt
+# and add any deps found in java_modules_append.txt.
+RUN yum -y install unzip \
+      && cd /tmp && unzip $(basename ${WAR_FILE}) \
       && /tmp/getJavaDependencies.sh /opt/ol/wlp/lib --jars \
       && /tmp/getJavaDependencies.sh /tmp/WEB-INF/lib --jars \
       && /tmp/getJavaDependencies.sh /tmp/WEB-INF/classes \
