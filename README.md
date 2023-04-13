@@ -14,9 +14,9 @@ The application depends on:
 Use maven to build the project
  - git clone https://github.com/prb112/acmeair-monolithic-java
  - cd acmeair-monolithic-java
- - mvn clean package
+ - cd source && mvn clean package && cd ..
 
-Note, if you are on a mac, you can setup maven using `brew install maven`
+Note, if you are on a mac, you can setup maven using `brew install maven` and `dnf install -y maven.noarch java-11-openjdk.x86_64`
 Note, the tests are commented out as they depend on out of data MongoDb test dependencies.
  
 ### Setup
