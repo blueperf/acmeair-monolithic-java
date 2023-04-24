@@ -1,9 +1,13 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1 #extensions/v1beta1
 kind: Deployment
 metadata:
   name: acmeair-monolithic-java-deployment
+  namespace: acmeair
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: acmeair
   template:
     metadata:
       labels:
@@ -12,7 +16,7 @@ spec:
     spec:
       containers:
       - name: acmeair-java
-        image: IMAGE_NAME
+        image: quay.io/cbade_cs/acmeair_test:acmeair-demo #IMAGE_NAME
         imagePullPolicy: Always
         env:
         - name: MONGO_MANUAL
