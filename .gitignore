@@ -7,4 +7,4 @@ bin/
 .DS_Store
 target
 **/target/*
-secrets.env
+**/.env.secret
