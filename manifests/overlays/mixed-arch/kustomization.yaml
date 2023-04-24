@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: acmeair # ghost
+namespace: acmeair #ghost
+resources:
+- namesspace/0_project.yaml
+- 1_app.yaml
+- 2_service.yaml
+- 3_route.yaml
+- 4_autoscaler.yaml
+- 5_secret.sh
+- 6_pvc.yaml
+- 7_db.yaml
+- 8_db_service.yaml
+images:
+- name: acmeair
+  newName: quay.io/cbade_cs/openshift-demo 
+  newTag: acme-air-4.14

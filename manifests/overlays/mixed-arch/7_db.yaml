@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acmeair-db
+  labels:
+    db: acmeair-db
+spec:
+        #  nodeSelector:
+        # kubernetes.io/arch: ppc64le
+        #node.openshift.io/os_id: rhcos
+  replicas: 1
+  selector:
+    matchLabels:
+      db: acmeair-db
+  template:
+    metadata:
+      labels:
+        db: acmeair-db
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: ppc64le
+        node.openshift.io/os_id: rhcos      
+      containers:
+      - image: icr.io/ppc64le-oss/mongodb-ppc64le:4.4.18
+        name: acmeair-db
+        args: ["--dbpath","/data/db"]
+        ports:
+        - containerPort: 27017
+          protocol: TCP
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-creds
+              key: username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-creds
+              key: password
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongo-data
+        securityContext:
+          privileged: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+              - ALL
+      volumes:
+      - name: mongo-data
+        persistentVolumeClaim:
+          claimName: mongodb-pvc
+      restartPolicy: Always
+      livenessProbe:
+          exec:
+            command:
+              - mongo
+              - --disableImplicitSessions
+              - --eval
+              - "db.adminCommand('ping')"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6
+      readinessProbe:
+          exec:
+            command:
+              - mongo
+              - --disableImplicitSessions
+              - --eval
+              - "db.adminCommand('ping')"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6

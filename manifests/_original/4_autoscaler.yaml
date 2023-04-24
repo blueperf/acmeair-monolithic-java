@@ -1,0 +1,11 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: acmeair-java-autoscaler
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    kind: Deployment
+    name: acmeair-monolithic-java-deployment
+  targetCPUUtilizationPercentage: 80
