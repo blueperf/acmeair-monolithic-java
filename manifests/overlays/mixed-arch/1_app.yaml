@@ -1,4 +1,4 @@
-apiVersion: apps/v1 #extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: acmeair-monolithic-java-deployment
@@ -29,10 +29,16 @@ spec:
           value: "27017"
         - name: MONGO_DBNAME
           value: "acmeair"
-        - name: MONGO_USER
-          value: "user"
-        - name: MONGO_PASSWORD
-          value: "password"
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-creds
+              key: username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-creds
+              key: password
         resources:
           requests:
             cpu: "700m"
