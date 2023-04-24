@@ -24,16 +24,20 @@ Note, the tests are commented out as they depend on out of data MongoDb test dep
 1. Create the MONGODB user and encode to base64.
 
 ```
-❯ export MONGODB_USER=$(echo admin | base64) 
+❯ export MONGODB_USER=$(echo admin)
 ```
 
 2. Create the MONGODB password and encode to base64. (an example)
 
 ```
-❯ export MONGODDB_PASS=$(echo NOT_REAL | base64)
+❯ export MONGODDB_PASS=$(echo NOT_REAL )
 ```
 
-3. <<To Be Added>>
+3. Run the kustomize
+
+```
+❯ kustomize build manifests/overlays/single-arch --reorder none | oc apply -f -
+```
 
 # Database loading
  - Go to the home page http://hostname:port
